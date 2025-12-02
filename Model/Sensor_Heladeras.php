@@ -114,10 +114,10 @@ class Sensor_Heladeras extends Sensor
 		$base = new BaseDatos();
 		$resp = false;
 
-		if (parent::insertar()) {
+		// if (parent::insertar()) {//acá comento esto porque si lo dejo cuando hago un alta de una nueva instancia de la clase hija me genera un nuevo id y entiendo que debería ser el mismo que se creó en la clase padre
 			$consultaInsertar = "INSERT INTO w_temperaturasensorheladera(idtemperaturasensor, marca, modelo)
 				VALUES (" . parent::getIdSensor() . ",
-                " . $this->getMarca() . ",
+                '" . $this->getMarca() . "',
                 '" . $this->getModelo() . "')";
 			if ($base->Iniciar()) {
 				if ($base->Ejecutar($consultaInsertar)) {
@@ -128,7 +128,7 @@ class Sensor_Heladeras extends Sensor
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}
-		}
+		// }
 		return $resp;
 	}
 
@@ -162,9 +162,9 @@ class Sensor_Heladeras extends Sensor
 		if ($base->Iniciar()) {
 			$consultaBorra = "DELETE FROM w_temperaturasensorheladera WHERE idtemperaturasensor=" . parent::getIdSensor();
 			if ($base->Ejecutar($consultaBorra)) {
-				// if (parent::eliminar()) { //le pongo esto xq no se si quiero que borre en el padre
+				if (parent::eliminar()) { //le pongo esto xq no se si quiero que se borre en el padre y creo que x las restricciones de integridad de la bd no puedo
 					$resp =  true;
-				// }
+				}
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}

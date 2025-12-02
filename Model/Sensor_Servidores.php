@@ -101,8 +101,8 @@ class Sensor_Servidores extends Sensor
 		$base = new BaseDatos();
 		$resp = false;
 
-		if (parent::insertar()) {
-			$consultaInsertar = "INSERT INTO w_temperaturasensorservidor(idtemperaturasensor tssporcentajeperdida)
+		// if (parent::insertar()) {//acá comento esto porque si lo dejo cuando hago un alta de una nueva instancia de la clase hija me genera un nuevo id y entiendo que debería ser el mismo que se creó en la clase padre
+			$consultaInsertar = "INSERT INTO w_temperaturasensorservidor(idtemperaturasensor, tssporcentajeperdida)
 				VALUES (" . parent::getIdSensor() . ",
                 '" . $this->getPorcentajePerdidas() . "')";
 			if ($base->Iniciar()) {
@@ -114,7 +114,7 @@ class Sensor_Servidores extends Sensor
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}
-		}
+		// }
 		return $resp;
 	}
 

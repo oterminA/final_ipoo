@@ -41,7 +41,7 @@ while (strtolower($rta) === "si") {
             echo "1) Alta de un sensor.\n"; //pedido en el enunciado
             echo "2) Alta de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "3) Alta de un sensor de sala de servidores.\n"; //pedido en el enunciado
-            echo "4) Baja de un sensor. \n"; //pedido en el enunciado
+            // echo "4) Baja de un sensor. \n"; //pedido en el enunciado pero acá lo obvio xq por la restriccion de integridad creo q no úeden quedardatos huerfanos, lo q pasaria si borro a los padres y quedan los hijos
             echo "5) Baja de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "6) Baja de un sensor de sala de servidores.\n"; //pedido en el enunciado
             echo "7) Modificacion de un sensor.\n"; //pedido en el enunciado
@@ -75,7 +75,7 @@ while (strtolower($rta) === "si") {
                     $idSensor = trim(fgets(STDIN));
                     $marca = trim(fgets(STDIN));
                     $modelo = trim(fgets(STDIN));
-                    $param = ['idtemperaturasensor'=> $idSensor, 'marca' => $marca, 'modelo' => $modelo];
+                    $param = ['idtemperaturasensor' => $idSensor, 'marca' => $marca, 'modelo' => $modelo];
                     $existeSensor = $objSensor->Buscar($idSensor);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $darAlta = $objSensorHeladeras->alta($param);  //hago el alta 
@@ -83,6 +83,34 @@ while (strtolower($rta) === "si") {
                             echo "SENSOR HELADERAS creado con éxito.\n";
                         } else {
                             echo "Error al crear.\n";
+                        }
+                    }
+                    break;
+                case '3':
+                    echo "Ingrese la siguiente información de SENSOR SALA DE SERVIDORES: ID del SENSOR y porcentaje(en decimal) de pérdidas.\n";
+                    $idSensor = trim(fgets(STDIN));
+                    $perdidas = trim(fgets(STDIN));
+                    $param = ['idtemperaturasensor' => $idSensor, 'tssporcentajeperdida' => $perdidas];
+                    $existeSensor = $objSensor->Buscar($idSensor);
+                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                        $darAlta = $objSensorServidores->alta($param);  //hago el alta 
+                        if ($darAlta) {
+                            echo "SENSOR SALA DE SERVIDORES creado con éxito.\n";
+                        } else {
+                            echo "Error al crear.\n";
+                        }
+                    }
+                    break;
+                case '5':
+                    echo "Ingrese el ID del SENSOR HELADERAS que desea dar de baja:\n";
+                    $idSensor = trim(fgets(STDIN));
+                    $existeSensor = $objSensor->Buscar($idSensor);
+                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                        $darBaja = $objSensorHeladeras->baja($idSensor);  
+                        if ($darBaja) {
+                            echo "SENSOR HELADERAS borrado con éxito.\n";
+                        } else {
+                            echo "Error al borrar.\n";
                         }
                     }
                     break;
