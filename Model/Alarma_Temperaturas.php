@@ -85,7 +85,7 @@ class Alarma_Temperaturas{
     }
 	    public function setFechaFin($fechaFin)
     {
-        $this->fechaInicio = $fechaFin;
+        $this->fechaFin = $fechaFin;
     }
     public function setmensajeoperacion($mensajeBD)
     { //lo que se muestra si hay o no algun error xq es una variable que viene desde la bd
@@ -186,7 +186,8 @@ class Alarma_Temperaturas{
 	public function modificar(){
 	    $resp =false; 
 	    $base=new BaseDatos();
-		$consultaModifica="UPDATE w_temperaturaalarmas SET idtemperaturasensor='".$this->getObjSensor()."',
+		$consultaModifica="UPDATE w_temperaturaalarmas 
+        SET idtemperaturasensor='".$this->getObjSensor()."',
         tasuperior='".$this->getSuperior()."',
         tainferior='".$this->getInferior()."',
         tafechainicio='".$this->getFechaInicio()."',

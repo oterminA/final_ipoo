@@ -123,7 +123,7 @@ class Sensor_Servidores extends Sensor
 	{
 		$resp = false;
 		$base = new BaseDatos();
-		if (parent::modificar()) {
+		// if (parent::modificar()) {
 			$consultaModifica = "UPDATE w_temperaturasensorservidor SET tssporcentajeperdida='" . $this->getPorcentajePerdidas() . "' WHERE idtemperaturasensor=" . parent::getIdSensor();
 			if ($base->Iniciar()) {
 				if ($base->Ejecutar($consultaModifica)) {
@@ -134,7 +134,7 @@ class Sensor_Servidores extends Sensor
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}
-		}
+		// }
 
 		return $resp;
 	}

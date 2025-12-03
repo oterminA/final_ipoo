@@ -137,10 +137,11 @@ class Sensor_Heladeras extends Sensor
 	{
 		$resp = false;
 		$base = new BaseDatos();
-		if (parent::modificar()) {
-			$consultaModifica = "UPDATE w_temperaturasensorheladera SET marca='" . $this->getMarca() .
-				", modelo='" . $this->getModelo() .
-				"' WHERE idtemperaturasensor=" . parent::getIdSensor();
+		// if (parent::modificar()) {
+			$consultaModifica = "UPDATE w_temperaturasensorheladera 
+			SET marca='" . $this->getMarca() ."', 
+			modelo='" . $this->getModelo() ."'
+				 WHERE idtemperaturasensor=" . parent::getIdSensor();
 			if ($base->Iniciar()) {
 				if ($base->Ejecutar($consultaModifica)) {
 					$resp =  true;
@@ -150,7 +151,7 @@ class Sensor_Heladeras extends Sensor
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}
-		}
+		// }
 
 		return $resp;
 	}
@@ -162,9 +163,9 @@ class Sensor_Heladeras extends Sensor
 		if ($base->Iniciar()) {
 			$consultaBorra = "DELETE FROM w_temperaturasensorheladera WHERE idtemperaturasensor=" . parent::getIdSensor();
 			if ($base->Ejecutar($consultaBorra)) {
-				if (parent::eliminar()) { //le pongo esto xq no se si quiero que se borre en el padre y creo que x las restricciones de integridad de la bd no puedo
+				// if (parent::eliminar()) { //le pongo esto xq no se si quiero que se borre en el padre y creo que x las restricciones de integridad de la bd no puedo
 					$resp =  true;
-				}
+				// }
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}
