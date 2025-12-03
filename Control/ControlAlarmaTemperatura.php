@@ -9,7 +9,7 @@ class ControlAlarmaTemperatura
     private function cargarObjeto($param)
     {
         $obj = null;
-        if (isset($param['tasuperior']) && isset($param['tainferior']) && isset($param['tafechainicio']) && isset($param['tafechafin'])) {
+        if (isset($param['idtemperaturasensor']) && isset($param['tasuperior']) && isset($param['tainferior']) && isset($param['tafechainicio']) && isset($param['tafechafin'])) {
 
             $id = $param['idtemperaturaalarma'] ?? null; // si no existe, null
     

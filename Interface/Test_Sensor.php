@@ -209,7 +209,7 @@ while (strtolower($rta) === "si") {
                     $fechaFin = trim(fgets(STDIN));
                     $existeSensor = $objSensor->Buscar($idSensor);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
-                        $param = ['idtemperaturasensor' => $objSensor, 'tasuperior' => $superior, 'tainferior' => $inferior, 'tafechainicio' => $fechaInicio, 'tafechafin' => $fechaFin];
+                        $param = ['idtemperaturasensor' => $idSensor, 'tasuperior' => $superior, 'tainferior' => $inferior, 'tafechainicio' => $fechaInicio, 'tafechafin' => $fechaFin];
                         $existeAlarma = $objAlarma->Buscar($param); //HELP, deberia revisar que el sensor existe? o que no estácon otra alarma?
                         if (is_array($existeAlarma) && count($existeAlarma) > 0) {
                             echo "Esa ALARMA ya existe. No pueden duplicarse los datos.\n";

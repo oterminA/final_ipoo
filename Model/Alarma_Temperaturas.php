@@ -161,9 +161,15 @@ class Alarma_Temperaturas{
 	public function insertar(){
 		$base=new BaseDatos();
 		$resp= false;
-		$consultaInsertar="INSERT INTO w_temperaturaalarmas(idtemperaturasensor, tasuperior, tainferior, tafechainicio, tafechafin) 
+        $objSensor = $this->getObjSensor();
+        if ($objSensor === null || is_object($objSensor) || !method_exists($objSensor, 'getIdSensor')){
+            $this->setmensajeoperacion($base->getError());
+            $resp = false;
+        }else{
+            $idSensor = $objSensor->getIdSensor();
+            $consultaInsertar="INSERT INTO w_temperaturaalarmas(idtemperaturasensor, tasuperior, tainferior, tafechainicio, tafechafin) 
 				VALUES (
-                '".$this->getObjSensor()."',
+                '".$idSensor."',
                 '".$this->getSuperior()."',
                 '".$this->getInferior()."',
                 '".$this->getFechaInicio()."',
@@ -180,6 +186,7 @@ class Alarma_Temperaturas{
 				$this->setmensajeoperacion($base->getError());
 		}
 		return $resp;
+        }
 	}
 	
 	
