@@ -142,15 +142,17 @@ class ControlAlarmaTemperatura
      * funcion para saber si una alarma está activa, o sea si la alarma no tiene fecha de fin es porque lo está
     */
     public function alarmaActiva($idSensor){
-        $resp = null;
+        $activa = null;
         $sql = "idtemperaturasensor = " . $idSensor . " AND tafechafin IS NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin
         $listadoActivas = Alarma_Temperaturas::listar($sql); //hago que se busquen todas las alarmas que coincidan con esa query
         $cantidad = count($listadoActivas);
 
         if($cantidad>0){//o sea hay activas
-            $resp = $listadoActivas[0]; 
+            $activa = $listadoActivas[0]; 
+        }else{
+            echo "NO HAY ALARMAS ACTIVAS\N";
         }
-        return $resp; //devuelvo alguna activa o null porque no se encontro
+        return $activa; //devuelvo alguna activa o null porque no se encontro
     }
 }
 

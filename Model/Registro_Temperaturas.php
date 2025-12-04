@@ -116,17 +116,13 @@ class Registro_Temperaturas{
 					$fecha=$row2['tlfecharegistro'];
 
                     $objSensor = new Sensor();
-                    $objSensor->Buscar($row2['idtemperaturasensor']);
-				
-					$objRegistro=new Registro_Temperaturas();
+					if($objSensor->Buscar($row2['idtemperaturasensor'])){
+						$objRegistro=new Registro_Temperaturas();
 					$objRegistro->cargar($idRegistro, $objSensor, $temperatura, $fecha);
 					array_push($arregloRegistro,$objRegistro);
+					}
 				}
-		 	}	else {
-		 			self::setmensajeoperacion($base->getError());
-			}
-		 }	else {
-		 		self::setmensajeoperacion($base->getError());
+		 	}	
 		 }	
 		 return $arregloRegistro;
 	}	

@@ -124,4 +124,38 @@ class ControlSensor
         $arreglo = Sensor::listar($where);
         return $arreglo;
     }
+
+    /** 
+     * esta funcion busca un id sensor e indica si es un sensor heladera, servidores o generico
+    */
+    public function detectarTipoSensor($idSensor){
+        $objSensor = new Sensor();
+        $existeSensor = $objSensor->Buscar($idSensor);
+        $resp = $objSensor;
+        if ($existeSensor){
+            //acá tengo que diferenciar un tipode sensor para posteriormente poder usar la formula correcta de calcular las perdidas
+            if ($objSensor->getMarca() !== null || $objSensor->getModelo()){ //por eso uso esto como forma de diferenciar entre un tipo y otro de sensor
+                $heladera = new Sensor_Heladeras();
+                $objSensorHeladera = $heladera->Buscar($idSensor);
+                $resp= $objSensorHeladera;
+            }elseif ($objSensor->getPorcentajePerdidas()) {
+                $servidor = new Sensor_Servidores();
+                $objSensorServidores = $servidor->Buscar($idSensor);
+                $resp = $objSensorServidores;
+            }
+        }
+        return $resp; //retorno ya tipo de sensor o el generico
+    }
+
+    /**
+     * esta función lo que hace es usar otra para detectar el tipo de sensor y llamar a la funcion del modelo para estimar la perdida, así puedo llamarla despues en la interface
+    */
+    public function estimarPerdida($idSensor){
+        $resp = null;
+        $sensor = $this->detectarTipoSensor($idSensor); //acá traigo el obj sensor correcto para poder sar correctamente la funcion de la perdida
+        if ($sensor !== null){
+            $resp = $sensor->estimarPerdidaFallo(); //acá llamoa esa funcion que me devolvería la perdida especificadel sensor que busco
+        }
+        return $resp; //esto devuelve la perdida o null porque sucedió algo malo
+    }
 }

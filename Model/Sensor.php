@@ -207,8 +207,9 @@ class Sensor{
      * retorna el importe final correspondiente a las pérdidas producidas en caso que el sensor (objSensor) falle
 	 * este metodo va acá porque trabajo con comportamiento del objeto y la logica del mismo, lo que abarca la capa del modelo
 	 * el metodo despues lo redefino en las clases hijas 
+	 * no voy a pedir cosas x parametro xq la capa del modelo trabaja con sus propios atributos entonces creoque no es necesario
     */
-    public function estimarPerdidaFallo($objSensor){
+    public function estimarPerdidaFallo(){
 		return 0; //retorno cero porque los calculos se tienen que hacer en las redefiniciones del metodo
     }
 

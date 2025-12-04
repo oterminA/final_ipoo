@@ -129,7 +129,6 @@ class Alarma_Temperaturas{
 		if ($condicion!=""){
 		    $consultaAlarma=$consultaAlarma.' where '.$condicion;
 		}
-		$consultaAlarma.=" order by tafechainicio ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaAlarma)){				
 				$arregloAlarma= array();
@@ -148,11 +147,7 @@ class Alarma_Temperaturas{
 					$objAlarma->cargar($idAlarma, $objSensor, $superior, $inferior, $fechaInicio, $fechaFin);
 					array_push($arregloAlarma,$objAlarma);
 				}
-		 	}	else {
-		 			self::setmensajeoperacion($base->getError());
-			}
-		 }	else {
-		 		self::setmensajeoperacion($base->getError());
+		 	}
 		 }	
 		 return $arregloAlarma;
 	}	

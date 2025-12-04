@@ -36,8 +36,10 @@ while (strtolower($rta) === "si") {
             echo "7) Modificacion de un sensor.\n"; //pedido en el enunciado
             echo "8) Modificacion de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "9) Modificacion de un sensor de sala de servidores.\n"; //pedido en el enunciado
-            echo "10) Visualizar informacion de los sensores.\n"; //pedido en el enunciado
-            echo "11) Visualizar información de un sensor por su ID.\n";
+            echo "10) Calcular perdidas monetarias de un sensor de heladeras.\n"; 
+            echo "11) Calcular perdidas monetarias de un sensor de sala de servidores.\n"; 
+            echo ") Visualizar informacion de los sensores.\n"; //pedido en el enunciado
+            echo ") Visualizar información de un sensor por su ID.\n";
             $op = trim(fgets(STDIN));
             switch ($op) {
                 case '1':
@@ -176,6 +178,15 @@ while (strtolower($rta) === "si") {
                         echo "Ese SENSOR SALA DE SERVIDORES no fue encontrado.\n";
                     }
                     break;
+                case '10':
+                    echo "Ingrese el ID del SENSOR cuyas perdidas quiere calcular:\n";
+                    $idSensor = trim(fgets(STDIN));
+                    $existeSensor = $objSensor->Buscar($idSensor);
+                    if ($existeSensor) {
+                        $perdidas = $objSensor->estimarPerdida($idSensor);
+                        echo "Para el SENSOR con ID " . $idSensor . " las perdidas fueron de $" . $perdidas . "\n";
+                    }
+                    break;
             }
             break;
 
@@ -258,7 +269,7 @@ while (strtolower($rta) === "si") {
                     $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensor->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
-                        $arrayTemperaturas = $objRegistro->registrosPorDebajo($idSensor);
+                        $arrayTemperaturas = $objRegistro->registrosPorDebajo($idSensor); //HELP, revisar q capaz que acá estoy pidiendo un array cuando en la alarmaActiva solo pido un elemento
                         if (count($arrayTemperaturas)>0){
                             echo "Para ese SENSOR el registro de temperaturas por debajo del registro es: \n";
                             foreach ($arrayTemperaturas as $temperatura) {
@@ -271,6 +282,43 @@ while (strtolower($rta) === "si") {
                         echo "Ese SENSOR no existe.\n";
                     }
                     break;
+                case '5':
+                    break;
+                case '6':
+                    echo "Ingrese el ID de un SENSOR para visualizar su temperatura más baja: \n";
+                    $idSensor = trim(fgets(STDIN));
+                    $paramS = ['idtemperaturasensor' => $idSensor];
+                    $existeSensor = $objSensor->Buscar($paramS);
+                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                        $temperatura = $objRegistro->temperaturaMenor($idSensor);
+                        if($temperatura !== null){
+                            echo "La temperatura más baja registrada para el SENSOR con ID " . $idSensor . " es: " . $temperatura . "°. \n";
+                        }else{
+                            echo "No se encontró la temperatura.\n";
+                        }
+                        
+                    }else{
+                        echo "Ese SENSOR no existe.\n";
+                    }
+                    break;
+
+                    case '7':
+                        echo "Ingrese el ID de un SENSOR para visualizar su temperatura más alta: \n";
+                        $idSensor = trim(fgets(STDIN));
+                        $paramS = ['idtemperaturasensor' => $idSensor];
+                        $existeSensor = $objSensor->Buscar($paramS);
+                        if (is_array($existeSensor) && count($existeSensor) > 0) {
+                            $temperatura = $objRegistro->temperaturaMayor($idSensor);
+                            if($temperatura !== null){
+                                echo "La temperatura más alta registrada para el SENSOR con ID " . $idSensor . " es: " . $temperatura . "°. \n";
+                            }else{
+                                echo "No se encontró la temperatura.\n";
+                            }
+                            
+                        }else{
+                            echo "Ese SENSOR no existe.\n";
+                        }
+                        break;
 
             }
             break;

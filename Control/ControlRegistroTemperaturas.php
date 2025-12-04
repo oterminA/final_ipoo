@@ -142,17 +142,20 @@ class ControlRegistroTemperaturas
         $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
         $arrayXDebajo = []; //creo un array
         $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
-        if (is_array($activas) && count($activas) > 0) {
-            $alarmaActiva = $activas[0];
+        if ($activas !== null) {
+            $alarmaActiva = $activas;
             $inferior = $alarmaActiva->getInferior(); //objetngo el rango inferior de alarmas
             $objRegistro = new Registro_Temperaturas();
             $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-            foreach ($registroXId as $registro) {
+            if(is_array($registroXId)){
+                 foreach ($registroXId as $registro) {
                 $temp = $registro->getTemperatura(); //guardo la temperaura de ese objregistro
                 if ($temp < $inferior) {
                     array_push($arrayXDebajo, $temp); //o sea si la temperatura es inferior, meto esa temp al array de registros x debajo
                 }
             }
+            }
+           
         }
         return $arrayXDebajo; //retorno el array con las temperaturas que están x debajo del rango o un array vacio en caso de q no haya alguna
     }
@@ -211,7 +214,8 @@ class ControlRegistroTemperaturas
         $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
         foreach ($registroXId as $registro) {
             $temperatura = $registro->getTemperatura(); //guardo la temperatura que eso obtiene
-            if ($temperatura < $mayor) {
+            if ($temperatura >
+             $mayor) {
                 $mayor = $temperatura; //voy guardando las temperaturas en $mayor para poder ir comparandolas y quedarme con la mayor de todas
             }
         }

@@ -165,8 +165,9 @@ class Sensor_Servidores extends Sensor
 	 * "Para el caso del sensor utilizado en la sala de servidores va a estar dada por la cantidad de servidores,
 su costo y el porcentaje aplicado a la pérdida"
 	 * el metodo está redefinido totalmente para esta clase por lo que la info del metodo en la clase padre no me sirve acá 
+	 * no voy a pedir cosas x parametro xq la capa del modelo trabaja con sus propios atributos entonces creoque no es necesario
 	 */
-	public function estimarPerdidaFallo($objSensor)
+	public function estimarPerdidaFallo()
 	{
 		$cantidad = $this->getElementosResguardados();
 		$costo = $this->getMontoResguardado();
