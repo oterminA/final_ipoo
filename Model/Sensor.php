@@ -210,7 +210,10 @@ class Sensor{
 	 * no voy a pedir cosas x parametro xq la capa del modelo trabaja con sus propios atributos entonces creoque no es necesario
     */
     public function estimarPerdidaFallo(){
-		return 0; //retorno cero porque los calculos se tienen que hacer en las redefiniciones del metodo
+			$cantidad = $this->getElementosResguardados();
+			$costo = $this->getMontoResguardado();
+			$perdida = $cantidad * $costo;
+			return $perdida;
     }
 
     //redefinicion metodo __toString()

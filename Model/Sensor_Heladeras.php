@@ -180,16 +180,16 @@ class Sensor_Heladeras extends Sensor
 	 * retorna el importe final correspondiente a las pérdidas producidas en caso que el sensor (objSensor) falle
 	 * este metodo va acá porque trabajo con comportamiento del objeto y la logica del mismo, lo que abarca la capa del modelo
 	 * "En cambio, para el caso de los sensores de las heladeras, va a estar dado por el costo promedio de productos por la cantidad"
-	 * el metodo está redefinido totalmente para esta clase por lo que la info del metodo en la clase padre no me sirve acá 
+	 * el metodo NO está redefinido porque despues me di cuenta que la clase sensor padre y esta usan la misma forma y solo cambia en la de sensor servidores
 	 * no voy a pedir cosas x parametro xq la capa del modelo trabaja con sus propios atributos entonces creoque no es necesario
 	 */
-	public function estimarPerdidaFallo()
-	{
-		$cantidad = $this->getElementosResguardados();
-		$costo = $this->getMontoResguardado();
-		$perdida = $cantidad * $costo;
-		return $perdida;
-	}
+	// public function estimarPerdidaFallo()
+	// {
+	// 	$cantidad = $this->getElementosResguardados();
+	// 	$costo = $this->getMontoResguardado();
+	// 	$perdida = $cantidad * $costo;
+	// 	return $perdida;
+	// }
 
 
 	public function __toString()

@@ -104,7 +104,6 @@ class ControlSensor
     /**
      * permite Buscar un objeto
      * @param array $param
-     * @return boolean
      */
     public function Buscar($param)
     {
@@ -130,25 +129,26 @@ class ControlSensor
     */
     public function detectarTipoSensor($idSensor){
         $objSensor = new Sensor();
-        $existeSensor = $objSensor->Buscar($idSensor);
-        $resp = $objSensor;
-        if ($existeSensor){
-            //acá tengo que diferenciar un tipode sensor para posteriormente poder usar la formula correcta de calcular las perdidas
-            if ($objSensor->getMarca() !== null || $objSensor->getModelo()){ //por eso uso esto como forma de diferenciar entre un tipo y otro de sensor
-                $heladera = new Sensor_Heladeras();
-                $objSensorHeladera = $heladera->Buscar($idSensor);
-                $resp= $objSensorHeladera;
-            }elseif ($objSensor->getPorcentajePerdidas()) {
-                $servidor = new Sensor_Servidores();
-                $objSensorServidores = $servidor->Buscar($idSensor);
-                $resp = $objSensorServidores;
-            }
+        $heladera = new Sensor_Heladeras();
+        $servidor = new Sensor_Servidores();
+        $resp = null;
+        $existeServidor = $objSensor->Buscar($idSensor);
+        $existeHeladera = $heladera->Buscar($idSensor);
+        $existeServidor = $servidor->Buscar($idSensor);
+
+        if($existeHeladera){
+            $resp= $heladera;
+        }elseif($existeServidor){
+            $resp = $servidor;
+        }else{
+            $resp = $objSensor;
         }
+        
         return $resp; //retorno ya tipo de sensor o el generico
     }
 
     /**
-     * esta función lo que hace es usar otra para detectar el tipo de sensor y llamar a la funcion del modelo para estimar la perdida, así puedo llamarla despues en la interface
+     * esta función lo que hace es usar otra q esta en el modelopara detectar el tipo de sensor y llamar a la funcion del modelo para estimar la perdida, así puedo llamarla despues en la interface
     */
     public function estimarPerdida($idSensor){
         $resp = null;
@@ -157,5 +157,18 @@ class ControlSensor
             $resp = $sensor->estimarPerdidaFallo(); //acá llamoa esa funcion que me devolvería la perdida especificadel sensor que busco
         }
         return $resp; //esto devuelve la perdida o null porque sucedió algo malo
+    }
+
+    /** 
+     * funcion xra mostrar la info de los sensores
+    */
+    public function mostrarInfoSensores(){
+        $objSensor = new Sensor();
+        $listado = $objSensor::listar();
+        return $listado; //retorno el array con la info del obj sensor
+    }
+
+    public function mostrarInfoID($idSensor){
+        return $this->detectarTipoSensor($idSensor); //retorno el sensor que me entrega esa funcion, que es el que me esta pidiendo ver el usuario y así le muestro su toString especifico en el menu
     }
 }

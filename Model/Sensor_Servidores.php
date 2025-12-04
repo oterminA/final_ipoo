@@ -77,7 +77,6 @@ class Sensor_Servidores extends Sensor
 		if ($condicion != "") {
 			$consulta = $consulta . ' where ' . $condicion;
 		}
-		$consulta .= " order by tssporcentajeperdida ";
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consulta)) {
 				$arreglo = array();
@@ -169,10 +168,9 @@ su costo y el porcentaje aplicado a la pérdida"
 	 */
 	public function estimarPerdidaFallo()
 	{
-		$cantidad = $this->getElementosResguardados();
-		$costo = $this->getMontoResguardado();
+		$montoPadre = parent::estimarPerdidaFallo(); //acá se guarda el valor que viene del metodo padre
 		$porcentaje = $this->getPorcentajePerdidas(); //tiene q estar en decimal
-		$perdida = $cantidad * $costo * $porcentaje;
+		$perdida = $montoPadre* $porcentaje;
 
 		return $perdida;
 	}
@@ -181,7 +179,8 @@ su costo y el porcentaje aplicado a la pérdida"
 	public function __toString()
 	{
 		$mensaje =
-			parent::__toString() . "\n" .
-			"Porcentaje perdidas: " . $this->getPorcentajePerdidas();
+			parent::__toString() . 
+			"Porcentaje perdidas: " . $this->getPorcentajePerdidas() . "%.\n";
+		return $mensaje;
 	}
 }
