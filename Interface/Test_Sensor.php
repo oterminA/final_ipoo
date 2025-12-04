@@ -36,7 +36,7 @@ while (strtolower($rta) === "si") {
             echo "7) Modificacion de un sensor.\n"; //pedido en el enunciado
             echo "8) Modificacion de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "9) Modificacion de un sensor de sala de servidores.\n"; //pedido en el enunciado
-            echo "10) Calcular perdidas monetarias de un sensor.\n"; 
+            echo "10) Calcular perdidas monetarias de un sensor.\n";
             echo "11) Visualizar informacion de los sensores.\n"; //pedido en el enunciado
             echo "12) Visualizar información de un sensor por su ID.\n";
             $op = trim(fgets(STDIN));
@@ -66,7 +66,7 @@ while (strtolower($rta) === "si") {
                     $marca = trim(fgets(STDIN));
                     $modelo = trim(fgets(STDIN));
                     $param = ['idtemperaturasensor' => $idSensor, 'marca' => $marca, 'modelo' => $modelo];
-                    $paramH= ['idtemperaturasensor' => $idSensor];
+                    $paramH = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensor->Buscar($paramH);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $darAlta = $objSensorHeladeras->alta($param);  //hago el alta 
@@ -82,7 +82,7 @@ while (strtolower($rta) === "si") {
                     $idSensor = trim(fgets(STDIN));
                     $perdidas = trim(fgets(STDIN));
                     $param = ['idtemperaturasensor' => $idSensor, 'tssporcentajeperdida' => $perdidas];
-                    $paramS= ['idtemperaturasensor' => $idSensor];
+                    $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensor->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $darAlta = $objSensorServidores->alta($param);  //hago el alta 
@@ -96,7 +96,7 @@ while (strtolower($rta) === "si") {
                 case '5':
                     echo "Ingrese el ID del SENSOR HELADERAS que desea dar de baja:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramH= ['idtemperaturasensor' => $idSensor];
+                    $paramH = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensorHeladeras->Buscar($paramH);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $param = ['idtemperaturasensor' => $idSensor, null, null];
@@ -106,12 +106,14 @@ while (strtolower($rta) === "si") {
                         } else {
                             echo "Error al borrar.\n";
                         }
+                    } else {
+                        echo "Ese SENSOR HELADERAS no existe.\n";
                     }
                     break;
                 case '6':
                     echo "Ingrese el ID del SENSOR SALA DE SERVIDORES que desea dar de baja:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramS= ['idtemperaturasensor' => $idSensor];
+                    $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensorServidores->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $param = ['idtemperaturasensor' => $idSensor, null];
@@ -121,12 +123,14 @@ while (strtolower($rta) === "si") {
                         } else {
                             echo "Error al borrar.\n";
                         }
+                    } else {
+                        echo "Ese SENSOR SALA DE SERVIDORES no existe.\n";
                     }
                     break;
                 case '7':
                     echo "Ingrese el ID del SENSOR que desea modificar:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramS= ['idtemperaturasensor' => $idSensor];
+                    $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensor->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         echo "Ingrese los datos nuevos: codigo del sensor, ubicacion, elementos resguardados, monto resguardado. \n";
@@ -148,7 +152,7 @@ while (strtolower($rta) === "si") {
                 case '8':
                     echo "Ingrese el ID del SENSOR HELADERAS que desea modificar:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramH= ['idtemperaturasensor' => $idSensor];
+                    $paramH = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensorHeladeras->Buscar($paramH);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         echo "Ingrese los datos nuevos: marca y modelo\n";
@@ -168,7 +172,7 @@ while (strtolower($rta) === "si") {
                 case '9':
                     echo "Ingrese el ID del SENSOR SALA DE SERVIDORES que desea modificar:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramS= ['idtemperaturasensor' => $idSensor];
+                    $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensorServidores->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         echo "Ingrese los datos nuevos: porcentaje(en decimal) de pérdidas.\n";
@@ -188,7 +192,7 @@ while (strtolower($rta) === "si") {
                     //acá preferí hacer un case para los tres metodos y hacer encontrol una funcion que los diferencie, se me hizo más cómodo así porque no pienso que es importante saber de qué es el sensor si ya se tiene su id
                     echo "Ingrese el ID del SENSOR cuyas perdidas quiere calcular:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramS= ['idtemperaturasensor' => $idSensor];
+                    $paramS = ['idtemperaturasensor' => $idSensor];
                     $existeSensor = $objSensor->Buscar($paramS);
                     if ($existeSensor) {
                         $perdidas = $objSensor->estimarPerdida($idSensor);
@@ -197,9 +201,9 @@ while (strtolower($rta) === "si") {
                     break;
                 case '11':
                     $listado = $objSensor->mostrarInfoSensores();
-                    if ($listado === null || $listado == 0){
+                    if ($listado === null || $listado == 0) {
                         echo "No hay sensores cargados.\n";
-                    }else{
+                    } else {
                         foreach ($listado as $cadaUno) {
                             echo $cadaUno . "\n";
                         }
@@ -209,9 +213,9 @@ while (strtolower($rta) === "si") {
                     echo "Ingrese el ID del SENSOR del que desea ver toda su información: \n";
                     $idSensor = trim(fgets(STDIN));
                     $info = $objSensor->mostrarInfoID($idSensor);
-                    if ($info === null){
+                    if ($info === null) {
                         echo "Ese SENSOR no existe.\n";
-                    }else{
+                    } else {
                         echo "La información del SENSOR con ID " . $idSensor . " es: \n";
                         echo $info . "\n";
                     }
@@ -224,8 +228,8 @@ while (strtolower($rta) === "si") {
             echo "1) Alta de un registro.\n"; //pedido en el enunciado
             echo "2) Baja de un registro. \n"; //pedido en el enunciado
             echo "3) Modificacion de un registro.\n"; //pedido en el enunciado
-            echo "4) Visualizar temperaturas de un sensor por debajo del rango.\n"; //pedido en el enunciado
-            echo "5) Visualizar temperaturas de un sensor por encima del rango.\n"; //pedido en el enunciado
+            echo "4) Visualizar temperaturas de un sensor por debajo del rango.\n"; //pedido en el enunciado HELP
+            echo "5) Visualizar temperaturas de un sensor por encima del rango.\n"; //pedido en el enunciado HELP
             echo "6) Visualizar temperatura más baja de un sensor.\n"; //pedido en el enunciado
             echo "7) Visualizar temperatura más alta de un sensor.\n"; //pedido en el enunciado
             echo "8) Mostrar registros de los sensores.\n";
@@ -282,7 +286,7 @@ while (strtolower($rta) === "si") {
                         $idSensor = trim(fgets(STDIN)); //esto se debería modificar?
                         $temperatura = trim(fgets(STDIN));
                         $fecha = trim(fgets(STDIN));
-                        $param = ['idtemperaturaregistro' => $idRegistro, 'idtemperaturasensor'=> $idSensor,'tltemperatura' => $temperatura, 'tlfecharegistro' => $fecha];
+                        $param = ['idtemperaturaregistro' => $idRegistro, 'idtemperaturasensor' => $idSensor, 'tltemperatura' => $temperatura, 'tlfecharegistro' => $fecha];
                         $modificar = $objRegistro->modificacion($param);
                         if ($modificar) {
                             echo "REGISTRO modificado con éxito.\n";
@@ -300,15 +304,15 @@ while (strtolower($rta) === "si") {
                     $existeSensor = $objSensor->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $arrayTemperaturas = $objRegistro->registrosPorDebajo($idSensor); //HELP, revisar q capaz que acá estoy pidiendo un array cuando en la alarmaActiva solo pido un elemento
-                        if (count($arrayTemperaturas)>0){
+                        if (count($arrayTemperaturas) > 0) {
                             echo "Para ese SENSOR el registro de temperaturas por debajo del registro es: \n";
                             foreach ($arrayTemperaturas as $temperatura) {
                                 echo "> " . $temperatura . "° \n";
                             }
-                        }else{
+                        } else {
                             echo "No se encontraron tales temperaturas.\n";
                         }
-                    }else{
+                    } else {
                         echo "Ese SENSOR no existe.\n";
                     }
                     break;
@@ -321,35 +325,55 @@ while (strtolower($rta) === "si") {
                     $existeSensor = $objSensor->Buscar($paramS);
                     if (is_array($existeSensor) && count($existeSensor) > 0) {
                         $temperatura = $objRegistro->temperaturaMenor($idSensor);
-                        if($temperatura !== null){
+                        if ($temperatura !== null) {
                             echo "La temperatura más baja registrada para el SENSOR con ID " . $idSensor . " es: " . $temperatura . "°. \n";
-                        }else{
+                        } else {
                             echo "No se encontró la temperatura.\n";
                         }
-                        
-                    }else{
+                    } else {
                         echo "Ese SENSOR no existe.\n";
                     }
                     break;
-
-                    case '7':
-                        echo "Ingrese el ID de un SENSOR para visualizar su temperatura más alta: \n";
-                        $idSensor = trim(fgets(STDIN));
-                        $paramS = ['idtemperaturasensor' => $idSensor];
-                        $existeSensor = $objSensor->Buscar($paramS);
-                        if (is_array($existeSensor) && count($existeSensor) > 0) {
-                            $temperatura = $objRegistro->temperaturaMayor($idSensor);
-                            if($temperatura !== null){
-                                echo "La temperatura más alta registrada para el SENSOR con ID " . $idSensor . " es: " . $temperatura . "°. \n";
-                            }else{
-                                echo "No se encontró la temperatura.\n";
-                            }
-                            
-                        }else{
-                            echo "Ese SENSOR no existe.\n";
+                case '7':
+                    echo "Ingrese el ID de un SENSOR para visualizar su temperatura más alta: \n";
+                    $idSensor = trim(fgets(STDIN));
+                    $paramS = ['idtemperaturasensor' => $idSensor];
+                    $existeSensor = $objSensor->Buscar($paramS);
+                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                        $temperatura = $objRegistro->temperaturaMayor($idSensor);
+                        if ($temperatura !== null) {
+                            echo "La temperatura más alta registrada para el SENSOR con ID " . $idSensor . " es: " . $temperatura . "°. \n";
+                        } else {
+                            echo "No se encontró la temperatura.\n";
                         }
-                        break;
-
+                    } else {
+                        echo "Ese SENSOR no existe.\n";
+                    }
+                    break;
+                case '8':
+                    $listado = $objRegistro->mostrarInfoRegistros();
+                    if ($listado === null || $listado == 0) {
+                        echo "No hay REGISTROS cargados.\n";
+                    } else {
+                        foreach ($listado as $cadaUno) {
+                            echo "---------------------------\n";
+                            echo $cadaUno . "\n";
+                        }
+                    }
+                    break;
+                case '9':
+                    echo "Ingrese el ID del REGISTRO del que desea ver toda su información: \n";
+                    $idRegistro = trim(fgets(STDIN));
+                    $paramR = ['idtemperaturaregistro'=> $idRegistro];
+                    $info = $objRegistro->Buscar($paramR);
+                    if (is_array($info) && count($info) >0){
+                        foreach ($info as $datos) {
+                            echo $datos . "\n";
+                        }
+                    }else{
+                        echo "Ese REGISTRO no se encontró.\n";
+                    }
+                    break;
             }
             break;
 
@@ -358,7 +382,8 @@ while (strtolower($rta) === "si") {
             echo "1) Alta de una alarma.\n"; //pedido en el enunciado
             echo "2) Baja de una alarma. \n"; //pedido en el enunciado
             echo "3) Modificacion de una alarma.\n"; //pedido en el enunciado
-            echo "4) Visualizar alarmas activas de un sensor.\n";
+            echo "4) Vincular una alarma con un aviso.\n";
+            echo ") Visualizar alarmas activas de un sensor.\n";
             $op = trim(fgets(STDIN));
             switch ($op) {
                 case '1':
@@ -390,7 +415,7 @@ while (strtolower($rta) === "si") {
                 case '2':
                     echo "Ingrese el ID de la ALARMA que desea eliminar:\n";
                     $idAlarma = trim(fgets(STDIN));
-                    $paramA= ['idtemperaturaalarma' => $idAlarma];
+                    $paramA = ['idtemperaturaalarma' => $idAlarma];
                     $existeAlarma = $objAlarma->Buscar($paramA);
                     if (is_array($existeAlarma) && count($existeAlarma) > 0) {
                         $darBaja = $objAlarma->baja(['idtemperaturaalarma' => $idAlarma]);
@@ -424,6 +449,26 @@ while (strtolower($rta) === "si") {
                         }
                     } else {
                         echo "Esa ALARMA no fue encontrada.\n";
+                    }
+                    break;
+                case '4':
+                    echo "Ingrese el ID de la ALARMA y del AVISO que quiere vincular:\n";
+                    $idAlarma = trim(fgets(STDIN));
+                    $idAviso =  trim(fgets(STDIN));
+                    $paramAl= ['idtemperaturaalarma' => $idAlarma];
+                    $paramAv = ['idtemperaturaalarma'=>$idAviso];
+                    $existeAviso = $objAviso->Buscar($paramAv);
+                    $existeAlarma = $objAlarma->Buscar($paramAl);
+                    if ((is_array($existeAlarma) && count($existeAlarma) > 0) && (is_array($existeAviso) && count($existeAviso) > 0)) {
+                        $param = ['idtemperaturaalarma'=>$idAviso, 'idtemperaturaalarma' => $idAlarma];
+                        $darAlta = $alarmaGeneraAviso->alta($param);
+                        if ($darAlta){
+                            echo "ALARMA generó AVISO con éxito.\n";
+                        }else{
+                            echo "Error al crear.\n";
+                        }
+                    }else{
+                        echo "ALARMA y/o AVISO no fueron encontrados.\n";
                     }
                     break;
             }

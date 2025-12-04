@@ -168,6 +168,9 @@ class ControlSensor
         return $listado; //retorno el array con la info del obj sensor
     }
 
+    /**
+     * funcion que retorna un obj especificoo para luego poder mostrar su toString
+    */
     public function mostrarInfoID($idSensor){
         return $this->detectarTipoSensor($idSensor); //retorno el sensor que me entrega esa funcion, que es el que me esta pidiendo ver el usuario y así le muestro su toString especifico en el menu
     }

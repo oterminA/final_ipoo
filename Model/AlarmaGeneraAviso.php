@@ -97,7 +97,7 @@ class AlarmaGeneraAviso{
 		if ($condicion!=""){
 		    $consulta=$consulta.' where '.$condicion;
 		}
-		$consulta.=" order by idtemperaturaalarma ";
+		// $consulta.=" order by idtemperaturaalarma ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consulta)){				
 				$arreglo= array();
@@ -126,10 +126,22 @@ class AlarmaGeneraAviso{
 	public function insertar(){
 		$base=new BaseDatos();
 		$resp= false;
+		$objAlarma = $this->getObjAlarma();
+		$objAviso = $this->getObjAviso();
+		if ($objAlarma === null || !method_exists($objAlarma, 'getIdAlarma')){
+            $this->setmensajeoperacion($base->getError());
+            $resp = false;
+        }
+		if ($objAviso === null || !method_exists($objAviso, 'getIdAviso')){
+            $this->setmensajeoperacion($base->getError());
+            $resp = false;
+        }
+		$idAviso = $objAviso->getIdAviso();
+		$idAlarma = $objAlarma->getIdAlarma();
 		$consultaInsertar="INSERT INTO w_temperaturasensortemperaturaaviso(idtemperaturaaviso, idtemperaturaalarma) 
 				VALUES (
-                '".$this->getObjAviso()."',
-                '".$this->getObjAlarma()."')";
+                '".$idAviso."',
+                '".$idAlarma."')";
 		
 		if($base->Iniciar()){
 			if($id = $base->devuelveIDInsercion($consultaInsertar)){
@@ -148,8 +160,10 @@ class AlarmaGeneraAviso{
 	public function modificar(){
 	    $resp =false; 
 	    $base=new BaseDatos();
-		$consultaModifica="UPDATE w_temperaturasensortemperaturaaviso SET idtemperaturaaviso='".$this->getObjAviso()."',
-        idtemperaturaalarma". $this->getObjAlarma()." 
+		$idAviso =$this->getObjAviso()->getIdAviso();
+		$idAlarma = $this->getObjAlarma()->getIdAlarma();
+		$consultaModifica="UPDATE w_temperaturasensortemperaturaaviso SET idtemperaturaaviso='".$idAviso."',
+        idtemperaturaalarma". $idAlarma." 
 		WHERE idavisoalarma=".$this->getId();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){

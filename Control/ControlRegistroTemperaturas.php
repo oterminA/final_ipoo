@@ -221,4 +221,14 @@ class ControlRegistroTemperaturas
         }
         return $mayor; //devuelvo la mayor temperatura para ese id
     }
+
+    
+    /** 
+     * funcion xra mostrar la info de los sensores
+    */
+    public function mostrarInfoRegistros(){
+        $objRegistro = new Registro_Temperaturas();
+        $listado = $objRegistro::listar();
+        return $listado; //retorno el array con la info del obj
+    }
 }
