@@ -117,9 +117,9 @@ class ControlRegistroTemperaturas
             if (isset($param['idtemperaturaregistro'])) {
                 $where .= " AND idtemperaturaregistro = '" . $param['idtemperaturaregistro'] . "'";
             }
-            if (isset($param['idtemperaturasensor']) && $param['idtemperaturasensor'] instanceof Sensor) {
-                $where .= " AND idtemperaturasensor = '" . $param['idtemperaturasensor']->getIdSensor() . "'";
-            }
+            if (isset($param['idtemperaturasensor'])) {
+                $where .= " AND idtemperaturasensor = '" . $param['idtemperaturasensor'] . "'";
+            } 
             if (isset($param['tltemperatura'])) {
                 $where .= " AND tltemperatura = '" . $param['tltemperatura'] . "'";
             }
@@ -140,17 +140,17 @@ class ControlRegistroTemperaturas
     {
         //tomo el id q entra x parametro y lobusco acá, despues en alarma tomo el rango inferior y meto en un array todas las temperaturas inferiores de ese sensor que cumplan
         $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
-        $activa = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
-        if ($activa <> null) {
-            $alarma = new Alarma_Temperaturas();
-            $inferior = $alarma->getInferior(); //objetngo el rango inferior de alarmas
+        $arrayXDebajo = []; //creo un array
+        $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
+        if (is_array($activas) && count($activas) > 0) {
+            $alarmaActiva = $activas[0];
+            $inferior = $alarmaActiva->getInferior(); //objetngo el rango inferior de alarmas
             $objRegistro = new Registro_Temperaturas();
             $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-            $arrayXDebajo = []; //creo un array
             foreach ($registroXId as $registro) {
                 $temp = $registro->getTemperatura(); //guardo la temperaura de ese objregistro
                 if ($temp < $inferior) {
-                    array_push($arrayXDebajo, $registro); //o sea si la temperatura es inferior, meto ese objregistro al array de registros x debajo
+                    array_push($arrayXDebajo, $temp); //o sea si la temperatura es inferior, meto esa temp al array de registros x debajo
                 }
             }
         }

@@ -10,14 +10,14 @@ class ControlAlarmaTemperatura
     {
         $obj = null;
         if (isset($param['idtemperaturasensor']) && isset($param['tasuperior']) && isset($param['tainferior']) && isset($param['tafechainicio']) && isset($param['tafechafin'])) {
-
+            $fechaFin = $param['tafechafin'] ?? null; // si no existe, null
             $id = $param['idtemperaturaalarma'] ?? null; // si no existe, null
     
             $objSensor = new Sensor();
             $objSensor->setIdSensor($param['idtemperaturasensor']);
             if ($objSensor->Buscar($objSensor->getIdSensor())) {
                 $obj = new Alarma_Temperaturas();
-                $obj->cargar($id, $objSensor, $param['tasuperior'], $param['tainferior'], $param['tafechainicio'], $param['tafechafin']); 
+                $obj->cargar($id, $objSensor, $param['tasuperior'], $param['tainferior'], $param['tafechainicio'], $fechaFin); 
             }
         }
         return $obj;
@@ -116,8 +116,8 @@ class ControlAlarmaTemperatura
             if (isset($param['idtemperaturaalarma'])) {
                 $where .= " AND idtemperaturaalarma = '" . $param['idtemperaturaalarma'] . "'";
             }
-            if (isset($param['idtemperaturasensor']) && $param['idtemperaturasensor'] instanceof Sensor) {
-                $where .= " AND idtemperaturasensor = '" . $param['idtemperaturasensor']->getIdSensor() . "'";
+            if (isset($param['idtemperaturasensor'])) {
+                $where .= " AND idtemperaturasensor = '" . $param['idtemperaturasensor'] . "'";
             }    
             if (isset($param['tasuperior'])) {
                 $where .= " AND tasuperior = '" . $param['tasuperior'] . "'";
@@ -139,11 +139,11 @@ class ControlAlarmaTemperatura
 
 
     /**
-     * funcion para saber si una alarma está activa basandome en q el "rango permitido" refiere a cuando la alarma está activada(entre los datos de inicio y fin) y sabiendo cuando está activa es que puedo filtrar los rangos
+     * funcion para saber si una alarma está activa, o sea si la alarma no tiene fecha de fin es porque lo está
     */
     public function alarmaActiva($idSensor){
         $resp = null;
-        $sql = "idtemperaturasensor = " . $idSensor . "AND tafechafin = NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin
+        $sql = "idtemperaturasensor = " . $idSensor . " AND tafechafin IS NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin
         $listadoActivas = Alarma_Temperaturas::listar($sql); //hago que se busquen todas las alarmas que coincidan con esa query
         $cantidad = count($listadoActivas);
 

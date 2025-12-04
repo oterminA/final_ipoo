@@ -141,6 +141,7 @@ class Alarma_Temperaturas{
 					$fechaFin=$row2['tafechafin'];
 
                     $objSensor = new Sensor();
+                    $objSensor->setIdSensor($row2['idtemperaturasensor']);
                     $objSensor->Buscar($row2['idtemperaturasensor']);
 				
 					$objAlarma=new Alarma_Temperaturas();
@@ -162,7 +163,7 @@ class Alarma_Temperaturas{
 		$base=new BaseDatos();
 		$resp= false;
         $objSensor = $this->getObjSensor();
-        if ($objSensor === null || is_object($objSensor) || !method_exists($objSensor, 'getIdSensor')){
+        if ($objSensor === null || !method_exists($objSensor, 'getIdSensor')){
             $this->setmensajeoperacion($base->getError());
             $resp = false;
         }else{
@@ -193,12 +194,13 @@ class Alarma_Temperaturas{
 	public function modificar(){
 	    $resp =false; 
 	    $base=new BaseDatos();
+        $idSensor = $this->getObjSensor()->getIdSensor(); //marca error pero esto tengo que ponerlo porque en sql yo tengo que pasar si o si un id, no puedo pasar un objeto porque así no funciona la bd
 		$consultaModifica="UPDATE w_temperaturaalarmas 
-        SET idtemperaturasensor='".$this->getObjSensor()."',
+        SET idtemperaturasensor='".$idSensor."',
         tasuperior='".$this->getSuperior()."',
         tainferior='".$this->getInferior()."',
         tafechainicio='".$this->getFechaInicio()."',
-        tafechafin". $this->getFechaFin()." 
+        tafechafin='".$this->getFechaFin()."' 
 		WHERE idtemperaturaalarma=".$this->getIdAlarma();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){

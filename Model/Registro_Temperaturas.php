@@ -106,7 +106,7 @@ class Registro_Temperaturas{
 		if ($condicion!=""){
 		    $consultaRegistro=$consultaRegistro.' where '.$condicion;
 		}
-		$consultaRegistro.=" order by tlfecharegistro ";
+		// $consultaRegistro.=" order by tlfecharegistro ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaRegistro)){				
 				$arregloRegistro= array();
@@ -136,9 +136,15 @@ class Registro_Temperaturas{
 	public function insertar(){
 		$base=new BaseDatos();
 		$resp= false;
+        $objSensor = $this->getObjSensor();
+        if ($objSensor === null || !method_exists($objSensor, 'getIdSensor')){
+            $this->setmensajeoperacion($base->getError());
+            $resp = false;
+        }else{
+            $idSensor = $objSensor->getIdSensor();
 		$consultaInsertar="INSERT INTO w_temperaturaregistro(idtemperaturasensor, tltemperatura, tlfecharegistro) 
 				VALUES (
-                '".$this->getObjSensor()."',
+                '".$idSensor."',
                 '".$this->getTemperatura()."',
                 '".$this->getFecha()."')";
 		
@@ -154,14 +160,16 @@ class Registro_Temperaturas{
 		}
 		return $resp;
 	}
-	
+}
 	
 	public function modificar(){
 	    $resp =false; 
 	    $base=new BaseDatos();
-		$consultaModifica="UPDATE w_temperaturaregistro SET idtemperaturasensor='".$this->getObjSensor()."',
+		$idSensor = $this->getObjSensor()->getIdSensor(); //marca error pero esto tengo que ponerlo porque en sql yo tengo que pasar si o si un id, no puedo pasar un objeto porque así no funciona la bd
+		$consultaModifica="UPDATE w_temperaturaregistro 
+		SET idtemperaturasensor='".$idSensor."',
         tltemperatura='".$this->getTemperatura()."',
-        tlfecharegistro". $this->getFecha()." WHERE idtemperaturaregistro=".$this->getIdRegistro();
+        tlfecharegistro='".$this->getFecha()."' WHERE idtemperaturaregistro=".$this->getIdRegistro();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;
