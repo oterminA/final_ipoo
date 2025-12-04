@@ -452,15 +452,15 @@ while (strtolower($rta) === "si") {
                     }
                     break;
                 case '4':
-                    echo "Ingrese el ID de la ALARMA y del AVISO que quiere vincular:\n";
-                    $idAlarma = trim(fgets(STDIN));
+                    echo "Ingrese el ID del AVISO e ID de la ALARMA que quiere vincular:\n";
                     $idAviso =  trim(fgets(STDIN));
+                    $idAlarma = trim(fgets(STDIN));
                     $paramAl= ['idtemperaturaalarma' => $idAlarma];
                     $paramAv = ['idtemperaturaalarma'=>$idAviso];
                     $existeAviso = $objAviso->Buscar($paramAv);
                     $existeAlarma = $objAlarma->Buscar($paramAl);
                     if ((is_array($existeAlarma) && count($existeAlarma) > 0) && (is_array($existeAviso) && count($existeAviso) > 0)) {
-                        $param = ['idtemperaturaalarma'=>$idAviso, 'idtemperaturaalarma' => $idAlarma];
+                        $param = ['idtemperaturaviso'=>$idAviso, 'idtemperaturaalarma' => $idAlarma];
                         $darAlta = $alarmaGeneraAviso->alta($param);
                         if ($darAlta){
                             echo "ALARMA generó AVISO con éxito.\n";

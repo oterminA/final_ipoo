@@ -163,7 +163,7 @@ class AlarmaGeneraAviso{
 		$idAviso =$this->getObjAviso()->getIdAviso();
 		$idAlarma = $this->getObjAlarma()->getIdAlarma();
 		$consultaModifica="UPDATE w_temperaturasensortemperaturaaviso SET idtemperaturaaviso='".$idAviso."',
-        idtemperaturaalarma". $idAlarma." 
+        idtemperaturaalarma=". $idAlarma." 
 		WHERE idavisoalarma=".$this->getId();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
