@@ -9,7 +9,7 @@ class ControlAlarmaGeneraAviso
     private function cargarObjeto($param)
     {
         $obj = null;
-        if (isset($param['idavisoalarma']) && isset($param['idtemperaturaaviso']) && isset($param['idtemperaturaalarma'])) {
+        if (isset($param['idtemperaturaaviso']) && isset($param['idtemperaturaalarma'])) {
 
             $objAviso = new Aviso_Temperaturas();
             $objAviso->setIdAviso($param['idtemperaturaaviso']);
@@ -17,7 +17,7 @@ class ControlAlarmaGeneraAviso
             $objAlarma = new Alarma_Temperaturas();
             $objAlarma->setIdAlarma($param['idtemperaturaalarma']);
 
-            $id = $param['idavisoalarma']?? null; // si no existe, null
+            $id = $param['idavisoalarma'] ?? null; // si no existe, null
 
             if (
                 $objAviso->Buscar($objAviso->getIdAviso()) &&
@@ -126,11 +126,11 @@ class ControlAlarmaGeneraAviso
             if (isset($param['idavisoalarma'])) {
                 $where .= " AND idavisoalarma = '" . $param['idavisoalarma'] . "'";
             }
-            if (isset($param['idtemperaturaaviso']) && $param['idtemperaturaaviso'] instanceof Aviso_Temperaturas) {
-                $where .= " AND idtemperaturaaviso = '" . $param['idtemperaturaaviso']->getIdAviso() . "'";
+            if (isset($param['idtemperaturaaviso']) && $param['idtemperaturaaviso']){
+                $where .= " AND idtemperaturaaviso = '" . $param['idtemperaturaaviso'] . "'";
             }
-            if (isset($param['idtemperaturaalarma']) && $param['idtemperaturaalarma'] instanceof Alarma_Temperaturas) {
-                $where .= " AND idtemperaturaalarma = '" . $param['idtemperaturaalarma']->getIdAlarma() . "'";
+            if (isset($param['idtemperaturaalarma']) && $param['idtemperaturaalarma']){
+                $where .= " AND idtemperaturaalarma = '" . $param['idtemperaturaalarma']. "'";
             }
         }
 

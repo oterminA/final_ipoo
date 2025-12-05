@@ -456,7 +456,7 @@ while (strtolower($rta) === "si") {
                     $idAviso =  trim(fgets(STDIN));
                     $idAlarma = trim(fgets(STDIN));
                     $paramAl= ['idtemperaturaalarma' => $idAlarma];
-                    $paramAv = ['idtemperaturaalarma'=>$idAviso];
+                    $paramAv = ['idtemperaturaviso'=>$idAviso];
                     $existeAviso = $objAviso->Buscar($paramAv);
                     $existeAlarma = $objAlarma->Buscar($paramAl);
                     if ((is_array($existeAlarma) && count($existeAlarma) > 0) && (is_array($existeAviso) && count($existeAviso) > 0)) {
