@@ -409,9 +409,9 @@ while (strtolower($rta) === "si") {
             echo "1) Alta de una alarma.\n"; //pedido en el enunciado
             echo "2) Baja de una alarma. \n"; //pedido en el enunciado
             echo "3) Modificacion de una alarma.\n"; //pedido en el enunciado
-            echo "4) Vincular una alarma con un aviso.\n";
-            echo "5) Dar de baja una alarma que generó un aviso.\n";
-            echo "6) Modificar una alarma que generó un aviso.\n";
+            echo "4) Vincular una alarma para generar un aviso.\n";
+            echo "5) Desvincular una alarma que generó un aviso.\n";
+            echo "6) Modificar la vinculación de una alarma que generó un aviso.\n";
             echo "7) Visualizar alarmas activas de un sensor por su ID.\n"; //o sea acá pido el id del sensor
             echo "8) Visualizar todas las alarmas.\n";
             echo "9) Visualizar una ALARMA por su ID.\n"; //acá pido el id de la alarma
@@ -487,11 +487,11 @@ while (strtolower($rta) === "si") {
                     $idAviso =  trim(fgets(STDIN));
                     $idAlarma = trim(fgets(STDIN));
                     $paramAl = ['idtemperaturaalarma' => $idAlarma];
-                    $paramAv = ['idtemperaturaviso' => $idAviso];
+                    $paramAv = ['idtemperaturaaviso' => $idAviso];
                     $existeAviso = $objAviso->Buscar($paramAv);
                     $existeAlarma = $objAlarma->Buscar($paramAl);
                     if ((is_array($existeAlarma) && count($existeAlarma) > 0) && (is_array($existeAviso) && count($existeAviso) > 0)) {
-                        $param = ['idtemperaturaviso' => $idAviso, 'idtemperaturaalarma' => $idAlarma];
+                        $param = ['idtemperaturaaviso' => $idAviso, 'idtemperaturaalarma' => $idAlarma];
                         $darAlta = $alarmaGeneraAviso->alta($param);
                         if ($darAlta) {
                             echo "ALARMA generó AVISO con éxito.\n";
@@ -504,9 +504,47 @@ while (strtolower($rta) === "si") {
                     break;
 
                 case '5':
+                    echo "Ingrese el ID de cuya relacion ALARMA-AVISO quiera desvincular:\n";
+                    $idAA = trim(fgets(STDIN));
+                    $paramA = ['idavisoalarma' => $idAA];
+                    $existeAA = $alarmaGeneraAviso->Buscar($paramA);
+                    if (is_array($existeAA) && count($existeAA) > 0) {
+                        $darBaja = $alarmaGeneraAviso->baja(['idavisoalarma' => $idAA]);
+                        if ($darBaja) {
+                            echo "RELACION eliminada con éxito.\n";
+                        } else {
+                            echo "Error al eliminar.\n";
+                        }
+                    } else {
+                        echo "Esa RELACION no fue encontrada.\n";
+                    }
                     break;
 
                 case '6':
+                    echo "Ingrese el ID de la relación que vincula ALARMA-AVISO que desea modificar:\n";
+                    $idAA = trim(fgets(STDIN));
+                    $paramAA = ['idavisoalarma' => $idAA];
+                    $existeAA = $alarmaGeneraAviso->Buscar($paramAA);
+                    if (is_array($existeAA) && count($existeAA) > 0) {
+                        echo "Ingrese los datos nuevos: ID del AVISO relacionado, e ID de la ALARMA relacionada.\n";
+                        $idAviso = trim(fgets(STDIN));
+                        $idAlarma = trim(fgets(STDIN));
+                        $paramAl = ['idtemperaturaalarma' => $idAlarma];
+                        $paramAv = ['idtemperaturaaviso' => $idAviso];
+                        $existeAviso = $objAviso->Buscar($paramAv);
+                        $existeAlarma = $objAlarma->Buscar($paramAl);
+                        if ((is_array($existeAlarma) && count($existeAlarma) > 0) && (is_array($existeAviso) && count($existeAviso) > 0)) {
+                            $param = ['idavisoalarma' => $idAA, 'idtemperaturaaviso' => $idAviso, 'idtemperaturaalarma' => $idAlarma];
+                            $modificar = $alarmaGeneraAviso->modificacion($param);
+                            if ($modificar) {
+                                echo "RELACIÓN modificada con éxito.\n";
+                            } else {
+                                echo "Error al modificar.\n";
+                            }
+                        }
+                    } else {
+                        echo "Esa RELACIÓN no fue encontrada.\n";
+                    }
                     break;
 
                 case '7':
@@ -521,10 +559,10 @@ while (strtolower($rta) === "si") {
                             foreach ($listadoActivas as $activa) {
                                 echo $activa . "\n";
                             }
-                        }else{
+                        } else {
                             echo "No hay ALARMAS activas para ese SENSOR.\n";
                         }
-                    }else{
+                    } else {
                         echo "Ese SENSOR no fue encontrado.\n";
                     }
                     break;

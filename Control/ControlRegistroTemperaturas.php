@@ -142,11 +142,11 @@ class ControlRegistroTemperaturas
         //o sea, la idea de esta funcion es: en la tabla de registros me fijo en un id especifico para tomar su temperatura inferior y a partir de ahi voy buscando las que estén por debajo de ella, o sea pej tomo el sensor con id 68 y si tiene registradas temperaturas en Registro Temperaturas, tomo la información del rango inferior que ese id tiene en Alarma Temperaturas y en base a ese rango yo voy a ir metiendo en un array todas las temperaturas registradas que estén por debajo
         $arrayXDebajo = []; //creo un array
         $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
-        $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
-        if ($activas !== null) {
+        $activas = $objAlarma->alarmaActiva($idSensor); //devuelve un array o vacio
+        if (is_array($activas) && count($activas)>0) {
             $objRegistro = new Registro_Temperaturas();
             $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-            if (is_array($registroXId)) {
+            if (is_array($registroXId)&& count($registroXId)>0) {
                 foreach ($activas as $unaAlarma) {
                     $inferior = $unaAlarma->getInferior(); //objetngo el rango inferior de alarma
 
@@ -173,10 +173,10 @@ class ControlRegistroTemperaturas
         $arrayXEncima = []; //creo un array
         $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
         $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
-        if ($activas !== null) {
+        if (is_array($activas) && count($activas)>0) {
             $objRegistro = new Registro_Temperaturas();
             $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-            if (is_array($registroXId)) {
+            if (is_array($registroXId) && count($registroXId)>0) {
                 foreach ($activas as $unaAlarma) {
                     $superior = $unaAlarma->getSuperior(); //objetngo el rango superior de alarma
 

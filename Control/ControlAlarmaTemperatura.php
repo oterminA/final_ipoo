@@ -143,7 +143,7 @@ class ControlAlarmaTemperatura
     */
     public function alarmaActiva($idSensor){
         $listadoActivas = [];
-        $sql = "idtemperaturasensor = " . $idSensor . " AND tafechafin IS NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin, se entiende que está activa
+        $sql = "idtemperaturasensor = " . $idSensor . " AND (tafechafin IS NULL OR tafechafin = '0000-00-00 00:00:00')"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin, se entiende que está activa
         $listadoActivas = Alarma_Temperaturas::listar($sql); //hago que se busquen todas las alarmas que coincidan con esa query
  
         return $listadoActivas; //devuelvo un array de todas las alarmas activas de ese sensor o uno vacio
@@ -158,5 +158,4 @@ class ControlAlarmaTemperatura
         return $listado; //retorno el array con la info del obj
     }
 }
-
 ?>
