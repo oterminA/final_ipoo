@@ -144,11 +144,12 @@ class ControlRegistroTemperaturas
         $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
         $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
         if ($activas !== null) {
-            foreach ($activas as $unaAlarma) {
-                $inferior = $unaAlarma->getInferior(); //objetngo el rango inferior de alarma
-                $objRegistro = new Registro_Temperaturas();
-                $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-                if (is_array($registroXId)) {
+            $objRegistro = new Registro_Temperaturas();
+            $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
+            if (is_array($registroXId)) {
+                foreach ($activas as $unaAlarma) {
+                    $inferior = $unaAlarma->getInferior(); //objetngo el rango inferior de alarma
+
                     foreach ($registroXId as $registro) {
                         $temp = $registro->getTemperatura(); //guardo la temperaura de ese objregistro
                         if ($temp < $inferior) { //comparo la temperatura que hay en registro con el limite que tiene
@@ -169,18 +170,22 @@ class ControlRegistroTemperaturas
     {
         //misma logica que la funcion de arriba solo que ahora busco lo que este por encima del rango
         //o sea, la idea de esta funcion es: en la tabla de registros me fijo en un id especifico para tomar su temperatura superior y a partir de ahi voy buscando las que estén por encima de ella, o sea pej tomo el sensor con id 68 y si tiene registradas temperaturas en Registro Temperaturas, tomo la información del rango superior que ese id tiene en Alarma Temperaturas y en base a ese rango yo voy a ir metiendo en un array todas las temperaturas registradas que estén por encima
-        $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
         $arrayXEncima = []; //creo un array
-        $activa = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
-        if ($activa <> null) {
-            $alarma = new Alarma_Temperaturas();
-            $superior = $alarma->getSuperior(); //objetngo el rango superior de alarmas
+        $objAlarma = new ControlAlarmaTemperatura(); //vreo un obj alarma para poder buscar la info
+        $activas = $objAlarma->alarmaActiva($idSensor); //busco si hay algina alarma activa o recibo null
+        if ($activas !== null) {
             $objRegistro = new Registro_Temperaturas();
             $registroXId = $objRegistro::listar("idtemperaturasensor =" . $idSensor); //o sea pido que me filtre todos los registros de temperaturas que sean del id ingresado
-            foreach ($registroXId as $registro) {
-                $temp = $registro->getTemperatura(); //guardo la temperaura de ese objregistro
-                if ($temp < $superior) {
-                    array_push($arrayXEncima, $registro); //o sea si la temperatura es sup$superior, meto ese objregistro al array de registros x encima
+            if (is_array($registroXId)) {
+                foreach ($activas as $unaAlarma) {
+                    $superior = $unaAlarma->getSuperior(); //objetngo el rango superior de alarma
+
+                    foreach ($registroXId as $registro) {
+                        $temp = $registro->getTemperatura(); //guardo la temperaura de ese objregistro
+                        if ($temp > $superior) { //comparo la temperatura que hay en registro con el limite que tiene
+                            array_push($arrayXEncima, $temp); //o sea si la temperatura es superior, meto esa temp al array de registros x encima
+                        }
+                    }
                 }
             }
         }
