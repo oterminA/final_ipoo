@@ -17,6 +17,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- todo está organizado en orden de primero la clase padre y despues las hijas, las clases que tienen referencia a otra clase se encuentran despues de esa clase
 -- ----------------------------
 -- Table structure for w_temperaturasensor
 -- ----------------------------
@@ -100,7 +101,7 @@ CREATE TABLE `w_temperaturaaviso`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `w_temperaturasensortemperaturaaviso`;
 CREATE TABLE `w_temperaturasensortemperaturaaviso`  (
-  `idavisoalarma` int(11) NOT NULL AUTO_INCREMENT,---id propio de la relacion
+  `idavisoalarma` int(11) NOT NULL AUTO_INCREMENT,---id propio de la relacion, me parece que es más manejable tener un id individual que estar tratando con una clave compuesta
   `idtemperaturaaviso` int(11) NOT NULL,
   `idtemperaturaalarma` int(11) NOT NULL,
   PRIMARY KEY (`idavisoalarma`) USING BTREE,

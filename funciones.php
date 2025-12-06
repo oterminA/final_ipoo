@@ -17,5 +17,5 @@ spl_autoload_register(function ($className) {
         }
     }
 
-    error_log("Autoload: Clase '$className' no encontrada."); //msj por si falla
+    error_log("Autoload: Clase '$className' no encontrada."); //msj por si falla la bd
 });

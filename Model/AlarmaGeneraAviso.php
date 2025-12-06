@@ -137,7 +137,7 @@ class AlarmaGeneraAviso{
             $resp = false;
         }
 		$idAviso = $objAviso->getIdAviso();
-		$idAlarma = $objAlarma->getIdAlarma();
+		$idAlarma = $objAlarma->getIdAlarma(); //no puedo hacer una query pasando un objeto porque estas solo reciben id, por eso tengo que obtener el id de alguna forma para poder usarlo en la consulta
 		$consultaInsertar="INSERT INTO w_temperaturasensortemperaturaaviso(idtemperaturaaviso, idtemperaturaalarma) 
 				VALUES (
                 '".$idAviso."',
@@ -200,8 +200,8 @@ class AlarmaGeneraAviso{
     {
         $mensaje = 
         "Id: " . $this->getId() . "\n" . 
-        "Objeto aviso----\n " . $this->getObjAviso() . "\n" . 
-        "Objeto alarma----\n " . $this->getObjAlarma() . "\n" ;
+        "Aviso relacionado----\n " . $this->getObjAviso() .  
+        "Alarma relacionada----\n " . $this->getObjAlarma() . "\n" ;
         return $mensaje;
     }
 

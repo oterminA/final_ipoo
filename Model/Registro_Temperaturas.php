@@ -201,7 +201,7 @@ class Registro_Temperaturas{
     {
         $mensaje = 
         "Id registro: " . $this->getIdRegistro() . "\n" . 
-        "Objeto sensor----\n " . $this->getObjSensor() . "\n" . 
+        "Sensor relacionado----\n " . $this->getObjSensor() .  
         "Temperatura: " . $this->getTemperatura() .  "\n" . 
         "Fecha: " . $this->getFecha() . "\n" ;
         return $mensaje;

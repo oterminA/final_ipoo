@@ -232,7 +232,7 @@ class Alarma_Temperaturas{
     {
         $mensaje = 
         "Id alarma: " . $this->getIdAlarma() . "\n" . 
-        "Objeto sensor----\n " . $this->getObjSensor() . "\n" . 
+        "Sensor relacionado ----\n " . $this->getObjSensor() . 
         "Superior: " . $this->getSuperior() .  "\n" . 
         "Inferior: " . $this->getInferior() .  "\n" . 
         "Fecha inicio: " . $this->getFechaInicio() .  "\n" . 

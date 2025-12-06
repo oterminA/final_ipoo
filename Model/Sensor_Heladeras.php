@@ -195,7 +195,7 @@ class Sensor_Heladeras extends Sensor
 	public function __toString()
 	{
 		$mensaje =
-			parent::__toString() . "\n" .
+			parent::__toString() . 
 			"Marca: " . $this->getMarca() . "\n" .
 			"Modelo: " . $this->getModelo() . "\n";
 	}

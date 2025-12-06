@@ -124,54 +124,57 @@ class ControlSensor
         return $arreglo;
     }
 
+
     /** 
-     * esta funcion busca un id sensor e indica si es un sensor heladera, servidores o generico
+     * para saber el tipo de sensor de un id sensor xq no tengo "tipo" como atributo de los sensores
+     * esta funcion busca un id sensor y me devuelve el objeto sensor con suinformacion especifica xq los servidores y las heladeras tienen atributos extras que no se comparten entre si
     */
     public function detectarTipoSensor($idSensor){
-        $objSensor = new Sensor();
+        $objSensor = new Sensor(); //hago un new de cada sensor para dsps poder usar la funcion buscar
         $heladera = new Sensor_Heladeras();
         $servidor = new Sensor_Servidores();
         $resp = null;
-        $existeServidor = $objSensor->Buscar($idSensor);
+        $existeServidor = $objSensor->Buscar($idSensor); //busco si existe el sensor que entra x parametro
         $existeHeladera = $heladera->Buscar($idSensor);
         $existeServidor = $servidor->Buscar($idSensor);
 
-        if($existeHeladera){
+        if($existeHeladera){ //si el id del parametro está en heladera me va a dar true
             $resp= $heladera;
-        }elseif($existeServidor){
+        }elseif($existeServidor){ //si el id del param está en servidor me va a dar true
             $resp = $servidor;
-        }else{
+        }else{ //si ese id no está en ninguna clase hija es porque no es un tipo de sensor y es generico
             $resp = $objSensor;
         }
         
-        return $resp; //retorno ya tipo de sensor o el generico
+        return $resp; //retorno ya tipo de sensor o el generico(o sea que no tiene especificacion de tipo)
     }
 
     /**
      * esta función lo que hace es usar otra q esta en el modelopara detectar el tipo de sensor y llamar a la funcion del modelo para estimar la perdida, así puedo llamarla despues en la interface
+     * segun el sensor es la info que va a tener la funcion polimorfica de estimarFalloPerdida, por eso tengo que diferenciarlos
     */
     public function estimarPerdida($idSensor){
         $resp = null;
         $sensor = $this->detectarTipoSensor($idSensor); //acá traigo el obj sensor correcto para poder sar correctamente la funcion de la perdida
         if ($sensor !== null){
-            $resp = $sensor->estimarPerdidaFallo(); //acá llamoa esa funcion que me devolvería la perdida especificadel sensor que busco
+            $resp = $sensor->estimarPerdidaFallo(); //acá llamoa esa funcion del modelo que me devolvería la perdida especificadel sensor que busco
         }
         return $resp; //esto devuelve la perdida o null porque sucedió algo malo
     }
 
     /** 
-     * funcion xra mostrar la info de los sensores
+     * funcion xra mostrar la info de los sensores, me limito a que solo muestrenla info generica porque despues si quieren ver más especificamente tengo otra forma de que se vea la info particular con los atributos extra de cada clase hija
     */
     public function mostrarInfoSensores(){
         $objSensor = new Sensor();
-        $listado = $objSensor::listar();
-        return $listado; //retorno el array con la info del obj sensor
+        $listado = $objSensor::listar(); //listar devuelve un array o null, es decir la info de ese sensor
+        return $listado; //retorno el array con la info del obj sensor o null
     }
 
     /**
      * funcion que retorna un obj especificoo para luego poder mostrar su toString
     */
     public function mostrarInfoID($idSensor){
-        return $this->detectarTipoSensor($idSensor); //retorno el sensor que me entrega esa funcion, que es el que me esta pidiendo ver el usuario y así le muestro su toString especifico en el menu
+        return $this->detectarTipoSensor($idSensor); //retorno el sensor que me entrega esa funcion, que es el que me esta pidiendo ver el usuario y así le muestro su toString especifico en el menu. Esto funciona xq en detectarTipoSensor yo estoy devolviendo el obj sensor por medio del new que hice, por eso me devuelve toda la info de ese sensor en particular
     }
 }

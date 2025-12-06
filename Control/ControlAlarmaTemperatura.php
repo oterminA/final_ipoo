@@ -143,14 +143,12 @@ class ControlAlarmaTemperatura
     */
     public function alarmaActiva($idSensor){
         $activa = null;
-        $sql = "idtemperaturasensor = " . $idSensor . " AND tafechafin IS NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin
+        $sql = "idtemperaturasensor = " . $idSensor . " AND tafechafin IS NULL"; //o sea hago la consulta de que si coincide el id que entro por parametro Y no hay una fehca de fin, se entiende que está activa
         $listadoActivas = Alarma_Temperaturas::listar($sql); //hago que se busquen todas las alarmas que coincidan con esa query
         $cantidad = count($listadoActivas);
 
         if($cantidad>0){//o sea hay activas
             $activa = $listadoActivas[0]; 
-        }else{
-            echo "NO HAY ALARMAS ACTIVAS\N";
         }
         return $activa; //devuelvo alguna activa o null porque no se encontro
     }
