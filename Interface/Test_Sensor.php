@@ -10,14 +10,20 @@ $objRegistro =  new ControlRegistroTemperaturas();
 $objAlarma = new ControlAlarmaTemperatura();
 $alarmaGeneraAviso = new ControlAlarmaGeneraAviso();
 
+/**
+ -Sensores
+ -Registros
+ -Alarmas
+ -Avisos
+*/
 
 
 //////////// IMPLEMENTACIÓN DEL MENÚ
 echo "***********************************************\n";
-echo "**Bienvenido, ¿desea ingresar al menú? si-no**\n";
+echo "**Bienvenido/a, ¿desea ingresar al menú? si-no**\n";
 $rta = trim(fgets(STDIN));
 while (strtolower($rta) === "si") {
-    echo "***********MENÚ SENSOR**********\n";
+    echo "***********MENÚ TEMPERATURAS**********\n";
     echo "¿Con qué elemento desea operar?\n";
     echo "a) Sensor de temperatura.\n";
     echo "b) Registros de temperatura.\n";
@@ -25,12 +31,13 @@ while (strtolower($rta) === "si") {
     echo "d) Aviso/notificacion de temperaturas\n";
     $opcion = strtolower(trim(fgets(STDIN)));
     switch ($opcion) {
+///////////----------------------------------------------------------------------------------------------------------/////////////
         case 'a': /////////SENSOR
             echo "Seleccione una opción para operar en SENSOR:\n";
             echo "1) Alta de un sensor.\n"; //pedido en el enunciado
             echo "2) Alta de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "3) Alta de un sensor de sala de servidores.\n"; //pedido en el enunciado
-            // echo "4) Baja de un sensor. \n"; //pedido en el enunciado pero acá lo obvio xq por la restriccion de integridad creo q no úeden quedardatos huerfanos, lo q pasaria si borro a los padres y quedan los hijos
+            // echo "4) Baja de un sensor. \n"; //pedido en el enunciado pero acá lo saco xq por la restriccion de integridad creo q no úeden quedardatos huerfanos, lo q pasaria si borro a los padres y quedan los hijos, por eso decido solo borrar a los hijos y que quede como una suerte de registro historico en la tabla de sensor padre
             echo "5) Baja de un sensor de heladeras.\n"; //pedido en el enunciado
             echo "6) Baja de un sensor de sala de servidores.\n"; //pedido en el enunciado
             echo "7) Modificacion de un sensor.\n"; //pedido en el enunciado
@@ -223,6 +230,8 @@ while (strtolower($rta) === "si") {
             }
             break;
 
+
+///////////----------------------------------------------------------------------------------------------------------/////////////
         case 'b': /////////REGISTROS
             echo "Seleccione una opción para operar en REGISTROS:\n";
             echo "1) Alta de un registro.\n"; //pedido en el enunciado
@@ -377,13 +386,18 @@ while (strtolower($rta) === "si") {
             }
             break;
 
+///////////----------------------------------------------------------------------------------------------------------/////////////
         case 'c': /////////ALARMA
             echo "Seleccione una opción para operar en ALARMA:\n";
             echo "1) Alta de una alarma.\n"; //pedido en el enunciado
             echo "2) Baja de una alarma. \n"; //pedido en el enunciado
             echo "3) Modificacion de una alarma.\n"; //pedido en el enunciado
             echo "4) Vincular una alarma con un aviso.\n";
-            echo ") Visualizar alarmas activas de un sensor.\n";
+            echo "5) Dar de baja una alarma que generó un aviso.\n";
+            echo "6) Modificar una alarma que generó un aviso.\n";
+            echo "7) Visualizar alarmas activas de un sensor por su ID.\n"; //o sea acá pido el id del sensor
+            echo "8) Visualizar todas las alarmas.\n";
+            echo "9) Visualizar una ALARMA por su ID.\n"; //acá pido el id de la alarma
             $op = trim(fgets(STDIN));
             switch ($op) {
                 case '1':
@@ -471,15 +485,51 @@ while (strtolower($rta) === "si") {
                         echo "ALARMA y/o AVISO no fueron encontrados.\n";
                     }
                     break;
+                
+                case '5':
+                    break;
+
+                case '6':
+                    break;
+
+                case '7':
+                    break;
+                
+                    case '8':
+                        $listado = $objAlarma->mostrarInfoAlarmas();
+                        if ($listado === null || $listado == 0) {
+                            echo "No hay ALARMAS cargadas.\n";
+                        } else {
+                            foreach ($listado as $cadaUno) {
+                                echo "---------------------------\n";
+                                echo $cadaUno . "\n";
+                            }
+                        }
+                        break;
+                    case '9':
+                        echo "Ingrese el ID de la ALARMA de la que desea ver toda su información: \n";
+                        $idAlarma = trim(fgets(STDIN));
+                        $paramR = ['idtemperaturaalarma' => $idAlarma];
+                        $info = $objAlarma->Buscar($paramR);
+                        if (is_array($info) && count($info) >0){
+                            foreach ($info as $datos) {
+                                echo $datos . "\n";
+                            }
+                        }else{
+                            echo "Esa ALARMA no se encontró.\n";
+                        }
+                        break;
             }
             break;
 
+///////////----------------------------------------------------------------------------------------------------------/////////////
         case 'd': /////////AVISO
             echo "Seleccione una opción para operar en AVISO: \n";
             echo "1) Alta de un aviso.\n"; //pedido en el enunciado
             echo "2) Baja de un aviso. \n"; //pedido en el enunciado
             echo "3) Modificacion de un aviso.\n"; //pedido en el enunciado
-            echo "4) Visualizar avisos de una alarma.\n"; //HELP. revisar si es necesario ver los avisos de una alarma
+            echo "4) Visualizar la información de todos los avisos.\n"; 
+            echo "5) Visualizar un aviso por su ID.\n";
             $op = trim(fgets(STDIN));
             switch ($op) {
                 case '1':
@@ -538,6 +588,30 @@ while (strtolower($rta) === "si") {
                         echo "Ese AVISO no fue encontrado.\n";
                     }
                     break;
+                case '4':
+                    $listado = $objAviso->mostrarInfoAvisos();
+                    if ($listado === null || $listado == 0) {
+                        echo "No hay AVISOS cargados.\n";
+                    } else {
+                        foreach ($listado as $cadaUno) {
+                            echo "---------------------------\n";
+                            echo $cadaUno . "\n";
+                        }
+                    }
+                    break;
+                case '5':
+                    echo "Ingrese el ID del AVISO del que desea ver toda su información: \n";
+                    $idAviso = trim(fgets(STDIN));
+                    $paramR = ['idtemperaturaaviso' => $idAviso];
+                    $info = $objAviso->Buscar($paramR);
+                    if (is_array($info) && count($info) >0){
+                        foreach ($info as $datos) {
+                            echo $datos . "\n";
+                        }
+                    }else{
+                        echo "Ese AVISO no se encontró.\n";
+                    }
+                    break;
             }
             break;
 
@@ -548,4 +622,4 @@ while (strtolower($rta) === "si") {
     echo "¿Desea ingresar al menú principal? si-no\n";
     $rta = trim(fgets(STDIN));
 }
-echo "**Ha salido del menú.**\n";
+echo "****Ha salido del menú.****\n";

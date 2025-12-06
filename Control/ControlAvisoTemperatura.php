@@ -123,4 +123,13 @@ class ControlAvisoTemperatura
         $arreglo = Aviso_Temperaturas::listar($where);
         return $arreglo;
     }
+
+    /** 
+     * funcion xra mostrar la info de los avisos
+    */
+    public function mostrarInfoAvisos(){
+        $objAviso = new Aviso_Temperaturas();
+        $listado = $objAviso::listar();
+        return $listado; //retorno el array con la info del obj
+    }
 }
