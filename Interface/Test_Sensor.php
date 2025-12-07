@@ -72,10 +72,13 @@ while (strtolower($rta) === "si") {
                     $idSensor = trim(fgets(STDIN));
                     $marca = trim(fgets(STDIN));
                     $modelo = trim(fgets(STDIN));
-                    $param = ['idtemperaturasensor' => $idSensor, 'marca' => $marca, 'modelo' => $modelo];
-                    $paramH = ['idtemperaturasensor' => $idSensor];
-                    $existeSensor = $objSensor->Buscar($paramH);
-                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                    // $paramH = ['idtemperaturasensor' => $idSensor];
+                    // $existeSensor = $objSensor->Buscar($paramH);
+                    $tipo = $objSensor->detectarTipoSensor($idSensor); //esto me diria si es un obj de sala de servidores por ejemplo
+                    if ($tipo instanceof Sensor_Servidores) { //o sea si es de servidores no puedo dar de alta como si fuera de heladeras
+                        echo "Ese SENSOR ya existe en otro tipo.\n";
+                    } else {
+                        $param = ['idtemperaturasensor' => $idSensor, 'marca' => $marca, 'modelo' => $modelo];
                         $darAlta = $objSensorHeladeras->alta($param);  //hago el alta 
                         if ($darAlta) {
                             echo "SENSOR HELADERAS creado con éxito.\n";
@@ -88,10 +91,13 @@ while (strtolower($rta) === "si") {
                     echo "Ingrese la siguiente información de SENSOR SALA DE SERVIDORES: ID del SENSOR y porcentaje(en decimal) de pérdidas.\n";
                     $idSensor = trim(fgets(STDIN));
                     $perdidas = trim(fgets(STDIN));
-                    $param = ['idtemperaturasensor' => $idSensor, 'tssporcentajeperdida' => $perdidas];
-                    $paramS = ['idtemperaturasensor' => $idSensor];
-                    $existeSensor = $objSensor->Buscar($paramS);
-                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                    $tipo = $objSensor->detectarTipoSensor($idSensor); //esto me diria si es un obj de heladeras por ejemplo
+                    // $paramS = ['idtemperaturasensor' => $idSensor];
+                    // $existeSensor = $objSensor->Buscar($paramS);
+                    if ($tipo instanceof Sensor_Heladeras) { //o sea si ese id pertenece a heladeras 
+                       echo "Ese SENSOR ya existe en otro tipo.\n";
+                    } else {
+                        $param = ['idtemperaturasensor' => $idSensor, 'tssporcentajeperdida' => $perdidas];
                         $darAlta = $objSensorServidores->alta($param);  //hago el alta 
                         if ($darAlta) {
                             echo "SENSOR SALA DE SERVIDORES creado con éxito.\n";
@@ -237,8 +243,8 @@ while (strtolower($rta) === "si") {
             echo "1) Alta de un registro.\n"; //pedido en el enunciado
             echo "2) Baja de un registro. \n"; //pedido en el enunciado
             echo "3) Modificacion de un registro.\n"; //pedido en el enunciado
-            echo "4) Visualizar temperaturas de un sensor por debajo del rango.\n"; //pedido en el enunciado HELP
-            echo "5) Visualizar temperaturas de un sensor por encima del rango.\n"; //pedido en el enunciado HELP
+            echo "4) Visualizar temperaturas de un sensor por debajo del rango.\n"; //pedido en el enunciado
+            echo "5) Visualizar temperaturas de un sensor por encima del rango.\n"; //pedido en el enunciado
             echo "6) Visualizar temperatura más baja de un sensor.\n"; //pedido en el enunciado
             echo "7) Visualizar temperatura más alta de un sensor.\n"; //pedido en el enunciado
             echo "8) Mostrar registros de los sensores.\n";
@@ -412,9 +418,11 @@ while (strtolower($rta) === "si") {
             echo "4) Vincular una alarma para generar un aviso.\n";
             echo "5) Desvincular una alarma que generó un aviso.\n";
             echo "6) Modificar la vinculación de una alarma que generó un aviso.\n";
-            echo "7) Visualizar alarmas activas de un sensor por su ID.\n"; //o sea acá pido el id del sensor
+            echo "7) Visualizar alarmas activas de un SENSOR por su ID.\n"; //o sea acá pido el id del sensor
             echo "8) Visualizar todas las alarmas.\n";
             echo "9) Visualizar una ALARMA por su ID.\n"; //acá pido el id de la alarma
+            echo "10) Visualizar todas las alarmas que generaron avisos.\n";
+            echo "11) Visualizar una alarma que genera aviso por su ID.\n";
             $op = trim(fgets(STDIN));
             switch ($op) {
                 case '1':
@@ -453,7 +461,7 @@ while (strtolower($rta) === "si") {
                         if ($darBaja) {
                             echo "ALARMA eliminada con éxito.\n";
                         } else {
-                            echo "Error al eliminar.\n";
+                            echo "Error al eliminar. La ALARMA puede tener vinculaciones con AVISO o surgió otro problema.\n";
                         }
                     } else {
                         echo "Esa ALARMA no fue encontrada.\n";
@@ -591,6 +599,30 @@ while (strtolower($rta) === "si") {
                         echo "Esa ALARMA no se encontró.\n";
                     }
                     break;
+                case '10':
+                    $listado = $alarmaGeneraAviso->mostrarInfoAA();
+                    if ($listado === null || $listado == 0) {
+                        echo "No hay ALARMAS que generan AVISOS cargadas.\n";
+                    } else {
+                        foreach ($listado as $cadaUno) {
+                            echo "---------------------------\n";
+                            echo $cadaUno . "\n";
+                        }
+                    }
+                    break;
+                case '11':
+                    echo "Ingrese el ID de la RELACION ALARMA-AVISO del que desea ver toda su información: \n";
+                    $idAA = trim(fgets(STDIN));
+                    $paramAA = ['idavisoalarma' => $idAA];
+                    $info = $alarmaGeneraAviso->Buscar($paramAA);
+                    if (is_array($info) && count($info) > 0) {
+                        foreach ($info as $datos) {
+                            echo $datos . "\n";
+                        }
+                    } else {
+                        echo "Esa RELACIÓN no se encontró.\n";
+                    }
+                    break;
             }
             break;
 
@@ -632,7 +664,7 @@ while (strtolower($rta) === "si") {
                         if ($darBaja) {
                             echo "AVISO eliminado con éxito.\n";
                         } else {
-                            echo "Error al eliminar.\n";
+                            echo "Error al eliminar. El AVISO puede tener vinculaciones con ALARMA o se generó otro problema.\n";
                         }
                     } else {
                         echo "Ese AVISO no fue encontrado.\n";

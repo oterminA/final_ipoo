@@ -1,43 +1,45 @@
 <?php
+//acá trabajo con objetos y claves-valor porque no estoy sacando la información directamente de la fuente porque el control es un intermediario, a diferencia de la capa del modelo
 class ControlSensor
 {
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto
-     * @param array $param
+     * crea al objeto completo y necesita toda la informacion. Lo uso más que nada para dar altas o modificar
+     * retorna el objeto que se arma a partir de los parametros
      * @return Sensor
      */
     private function cargarObjeto($param)
     {
         $obj = null;
 
-        if (isset($param['tscodigo']) && isset($param['tsubicacion']) && isset($param['tselementosresguardan']) && isset($param['tsmontoresguardado'])) {
-            $id = $param['idtemperaturasensor'] ?? null; // si no existe, null
-            $obj = new Sensor();
-            $obj->cargar($id, $param['tscodigo'], $param['tsubicacion'], $param['tselementosresguardan'], $param['tsmontoresguardado']);
+        if (isset($param['tscodigo']) && isset($param['tsubicacion']) && isset($param['tselementosresguardan']) && isset($param['tsmontoresguardado'])) {//es lo que se espera recibir por parametro, son los atributos de la clase menos el id de esta clase xq es autoincremental entonces habria como una contradiccion ahi
+            $id = $param['idtemperaturasensor'] ?? null; // si no existe ese id null porque en realidad acá no viene xq es autoincremental
+            $obj = new Sensor(); //new de sensor
+            $obj->cargar($id, $param['tscodigo'], $param['tsubicacion'], $param['tselementosresguardan'], $param['tsmontoresguardado']);//cargo todos los datos necesarios al crear la clase
         }
-        return $obj;
+        return $obj;//retorno el objeto nuevo creado o null en caso de que falle algo
     }
+
 
     /**
      * Espera como parametro un arreglo asociativo donde las claves coinciden con los nombres de las variables instancias del objeto que son claves
-     * @param array $param
+     * retorna el objeto creado pero solo necesitando su id, no necesita el resto de la info. Lo uso más que nada para dar bajas, verificar que exista el objeto solo buscando su id, donde no preciso del resto de los datos
      * @return Sensor
      */
     private function cargarObjetoConClave($param)
     {
         $obj = null;
 
-        if (isset($param['idtemperaturasensor'])) { 
-            $obj = new Sensor();
-            $obj->cargar($param['idtemperaturasensor'], null, null, null, null);
+        if (isset($param['idtemperaturasensor'])) { //si está seteado ese id, o sea si contiene datos:
+            $obj = new Sensor();//new de esa clase
+            $obj->cargar($param['idtemperaturasensor'], null, null, null, null);//cargo al objeto pero sin la necesidad de poner los demás datos, por eso uso los null
         }
-        return $obj;
+        return $obj;//retorno el objeto si pudo crearse o null si no
     }
 
 
     /**
      * Corrobora que dentro del arreglo asociativo estan seteados los campos claves
-     * @param array $param
      * @return boolean
      */
 
@@ -49,19 +51,20 @@ class ControlSensor
         return $resp;
     }
 
+
     /**
-     * 
-     * @param array $param
+     * genera un INSERT basicamente, de lo pasado por parametro, o sea necesita de la funcion insertar() del modelo
+     * @return boolean
      */
     public function alta($param)
     {
         $resp = false;
-        $elObjtSensor = $this->cargarObjeto($param);
+        $elObjtSensor = $this->cargarObjeto($param);//cargo el objeto con los datos q entran x param
         //        verEstructura($elObjtSensor);
-        if ($elObjtSensor != null and $elObjtSensor->insertar()) {
+        if ($elObjtSensor != null and $elObjtSensor->insertar()) {//si el objeto no es null y da true la inserción:
             $resp = true;
         }
-        return $resp;
+        return $resp;//revuelvo true si se pudo dar el alta, false si no
     }
 
 
@@ -73,44 +76,45 @@ class ControlSensor
     public function baja($param)
     {
         $resp = false;
-        if ($this->seteadosCamposClaves($param)) {
-            $elObjtSensor = $this->cargarObjetoConClave($param);
-            if ($elObjtSensor != null and $elObjtSensor->eliminar()) {
+        if ($this->seteadosCamposClaves($param)) {//si los campos están correctamente seteados da true
+            $elObjtSensor = $this->cargarObjetoConClave($param);//cargo el objeto solo con su id porque necesito solamente borrarlo
+            if ($elObjtSensor != null and $elObjtSensor->eliminar()) {//si el objeto no es nulo y se pudo borrar:
                 $resp = true;
             }
         }
-
         return $resp;
     }
 
+
     /**
-     * permite modificar un objeto
-     * @param array $param
+     * permite modificar un objeto por la info que llega por paramentro, se ejecuta la funcion de la capa del modelo
      * @return boolean
      */
     public function modificacion($param)
     {
         $resp = false;
-        if ($this->seteadosCamposClaves($param)) {
-            $elObjtSensor = $this->cargarObjeto($param);
-            if ($elObjtSensor != null and $elObjtSensor->modificar()) {
+        if ($this->seteadosCamposClaves($param)) {//si los campos están correctamente seteados da true
+            $elObjtSensor = $this->cargarObjeto($param);//acá si uso cargarObjeto porque necesito toda la info del obj ya que tengo campos que modificar
+            if ($elObjtSensor != null and $elObjtSensor->modificar()) {//si el obj no es nulo y se puede modificar:
                 $resp = true;
             }
         }
-        return $resp;
+        return $resp;//true si se pudo hacer la modificacion, false si no
     }
 
 
     /**
-     * permite Buscar un objeto
+     * permite Buscar un objeto usando info que entra por parametro y acá tengo que usarlo así porque no puedo acceder directamente a la info sino que tengo q pasar por el modelo
+     * usa una función que viene desde el modelo
      * @param array $param
      */
     public function Buscar($param)
     {
         $where = " true ";
-        if ($param <> NULL) {
+        if ($param <> NULL) {//si el parametro no es nulo
             if (isset($param['idtemperaturasensor']))
-                $where .= " and idtemperaturasensor =" . $param['idtemperaturasensor'];
+                $where .= " and idtemperaturasensor =" . $param['idtemperaturasensor'];//si coincide el id de la tupla
+            //si coinciden el resto de los paramtros que recibe la tupla, los voy concatenando
             if (isset($param['tscodigo']))
                 $where .= " and tscodigo ='" . $param['tscodigo'] . "'";
             if (isset($param['tsubicacion']))
@@ -120,8 +124,8 @@ class ControlSensor
             if (isset($param['tsmontoresguardado']))
                 $where .= " and tsmontoresguardado ='" . $param['tsmontoresguardado'] . "'";
         }
-        $arreglo = Sensor::listar($where);
-        return $arreglo;
+        $arreglo = Sensor::listar($where);//armo un arreglo usando listar que recibe un parametro y en base a eso genera un arreglo, o sea creo el array si es que los datos coinciden
+        return $arreglo;//retorno el array
     }
 
 
@@ -134,7 +138,7 @@ class ControlSensor
         $heladera = new Sensor_Heladeras();
         $servidor = new Sensor_Servidores();
         $resp = null;
-        $existeServidor = $objSensor->Buscar($idSensor); //busco si existe el sensor que entra x parametro
+        $existeSensor = $objSensor->Buscar($idSensor); //busco si existe el sensor que entra x parametro
         $existeHeladera = $heladera->Buscar($idSensor);
         $existeServidor = $servidor->Buscar($idSensor);
 
@@ -142,12 +146,13 @@ class ControlSensor
             $resp= $heladera;
         }elseif($existeServidor){ //si el id del param está en servidor me va a dar true
             $resp = $servidor;
-        }else{ //si ese id no está en ninguna clase hija es porque no es un tipo de sensor y es generico
+        }elseif($existeSensor){ //si ese id no está en ninguna clase hija es porque no es un tipo de sensor y es generico
             $resp = $objSensor;
         }
         
-        return $resp; //retorno ya tipo de sensor o el generico(o sea que no tiene especificacion de tipo)
+        return $resp; //retorno ya el obj tipo de sensor o el generico(o sea que no tiene especificacion de tipo)
     }
+
 
     /**
      * esta función lo que hace es usar otra q esta en el modelopara detectar el tipo de sensor y llamar a la funcion del modelo para estimar la perdida, así puedo llamarla despues en la interface
@@ -162,6 +167,7 @@ class ControlSensor
         return $resp; //esto devuelve la perdida o null porque sucedió algo malo
     }
 
+
     /** 
      * funcion xra mostrar la info de los sensores, me limito a que solo muestrenla info generica porque despues si quieren ver más especificamente tengo otra forma de que se vea la info particular con los atributos extra de cada clase hija
     */
@@ -171,6 +177,7 @@ class ControlSensor
         return $listado; //retorno el array con la info del obj sensor o null
     }
 
+    
     /**
      * funcion que retorna un obj especificoo para luego poder mostrar su toString
     */
