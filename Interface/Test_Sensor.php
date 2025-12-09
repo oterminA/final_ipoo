@@ -144,15 +144,15 @@ while (strtolower($rta) === "si") {
                     echo "Ingrese el ID del SENSOR que desea modificar:\n";
                     $idSensor = trim(fgets(STDIN));
                     $paramS = ['idtemperaturasensor' => $idSensor]; //armo el array para pasarlo como parametro en buscar
-                    $existeSensor = $objSensor->Buscar($paramS); //paso el parametro para ver si ese id sensor generico existe
-                    if (is_array($existeSensor) && count($existeSensor) > 0) { //si existe pido los datos para modificarlos
+                    $existeSensor = $objSensor->Buscar($paramS); //paso el parametro para ver si ese id existe
+                    if (is_array($existeSensor) && count($existeSensor) > 0) { //si existe pido datos
                         echo "Ingrese los datos nuevos: codigo del sensor, ubicacion, elementos resguardados, monto resguardado. \n";
                         $codigo = trim(fgets(STDIN));
                         $ubicacion = trim(fgets(STDIN));
                         $elementos = trim(fgets(STDIN));
                         $monto = trim(fgets(STDIN));
-                        $param = ['idtemperaturasensor' => $idSensor, 'tscodigo' => $codigo, 'tsubicacion' => $ubicacion, 'tselementosresguardan' => $elementos, 'tsmontoresguardado' => $monto]; //armo el array para pasarle a modificar
-                        $modificar = $objSensor->modificacion($param); //llamo a la funcion y paso el parametro porque eso es lo que recibe
+                        $param = ['idtemperaturasensor' => $idSensor, 'tscodigo' => $codigo, 'tsubicacion' => $ubicacion, 'tselementosresguardan' => $elementos, 'tsmontoresguardado' => $monto];
+                        $modificar = $objSensor->modificacion($param);
                         if ($modificar) {
                             echo "SENSOR modificado con éxito.\n";
                         } else {
@@ -165,10 +165,10 @@ while (strtolower($rta) === "si") {
                 case '8':
                     echo "Ingrese el ID del SENSOR HELADERAS que desea modificar:\n";
                     $idSensor = trim(fgets(STDIN));
-                    $paramH = ['idtemperaturasensor' => $idSensor]; //array xra pasarle a buscar y ver si existe ese sensor en heladeras
-                    $existeSensor = $objSensorHeladeras->Buscar($paramH); //busco esos datos
-                    if (is_array($existeSensor) && count($existeSensor) > 0) { //si existe
-                        echo "Ingrese los datos nuevos: marca y modelo\n"; //pido los datos 
+                    $paramH = ['idtemperaturasensor' => $idSensor];
+                    $existeSensor = $objSensorHeladeras->Buscar($paramH);
+                    if (is_array($existeSensor) && count($existeSensor) > 0) {
+                        echo "Ingrese los datos nuevos: marca y modelo\n";
                         $marca = trim(fgets(STDIN));
                         $modelo = trim(fgets(STDIN));
                         $param = ['idtemperaturasensor' => $idSensor, 'marca' => $marca, 'modelo' => $modelo];
