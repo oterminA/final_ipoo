@@ -16,7 +16,7 @@ mer_bdsensor.jpg: Diagrama de Entidad-Relación que detalla la estructura de la 
 
 funciones.php: Scripts auxiliares y funciones generales del sistema.
 
-Funcionalidades Principales
+>Funcionalidades Principales
 Gestión de Sensores: Registro y administración de diferentes dispositivos sensores.
 
 Registro de Mediciones: Almacenamiento histórico de los valores de temperatura capturados.
