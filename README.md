@@ -34,5 +34,5 @@ Base de Datos: SQL (según el diagrama de modelo relacional incluido).
 El proyecto no posee una interfaz gráfica web; se visualiza y gestiona mediante un **menú interactivo por consola**. 
 * **Entorno recomendado:** Terminal integrada de Visual Studio Code.
 * **Interacción:** El usuario selecciona las opciones del menú ingresando los valores correspondientes por teclado.
--------------------------------------------------**-------------------------------------------------
+<hr> <br>
 Este proyecto fue desarrollado como examen final para demostrar conocimientos en arquitectura de capas y modelado de objetos para la materia 'Introducción a la Programación Orientada a Objetos' de la Tecnicatura Universitaria en Desarrollo Web (año 2025).
