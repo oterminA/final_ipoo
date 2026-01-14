@@ -1,4 +1,4 @@
-Sistema de Control de Temperatura - Final IPOO
+Sistema de Control de Temperatura - Final IPOO <br>
 Este repositorio contiene el trabajo práctico final para la asignatura Introducción a la Programación Orientada a Objetos (aprobado en 2025). El proyecto consiste en un sistema diseñado para gestionar y monitorear mediciones de temperatura a través de diferentes tipos de sensores. 
 
 >Estructura del Proyecto
