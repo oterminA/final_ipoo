@@ -1,7 +1,7 @@
 Sistema de Control de Temperatura - Final IPOO <br>
 Este repositorio contiene el trabajo práctico final para la asignatura Introducción a la Programación Orientada a Objetos (aprobado en 2025). El proyecto consiste en un sistema diseñado para gestionar y monitorear mediciones de temperatura a través de diferentes tipos de sensores. 
 
->Estructura del Proyecto
+>Estructura del Proyecto <br>
 El sistema sigue una arquitectura organizada en capas:
 
 /Model: Contiene las clases que representan las entidades del sistema (Sensores, Mediciones, etc.) y la lógica de interacción con la base de datos.
@@ -16,7 +16,7 @@ mer_bdsensor.jpg: Diagrama de Entidad-Relación que detalla la estructura de la 
 
 funciones.php: Scripts auxiliares y funciones generales del sistema.
 
->Funcionalidades Principales
+>Funcionalidades Principales <br>
 Gestión de Sensores: Registro y administración de diferentes dispositivos sensores.
 
 Registro de Mediciones: Almacenamiento histórico de los valores de temperatura capturados.
@@ -25,7 +25,7 @@ Persistencia de Datos: El sistema está diseñado para conectarse a una base de 
 
 Lógica POO: Implementación de herencia y encapsulamiento para manejar distintos comportamientos de sensores.
 
->Tecnologías
+>Tecnologías<br>
 Lenguaje: PHP (100%)
 
 Base de Datos: SQL (según el diagrama de modelo relacional incluido).
